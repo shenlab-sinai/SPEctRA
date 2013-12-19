@@ -81,11 +81,9 @@ class QCReport(object):
 		return sample
 	
 	def writeReport(self):
-		file = open("sample.txt", "w")
+		file = open("sample.txt", "w") #change to relative path
 		file.write(self.gatherReport())
 		file.close()
 		
-	def testReport(self):
-		print "Testing if python class is launched from specific script"
 # test = QCReport("/home/immanuel/Documents/Sample_project/mapping/CPU_C4_ACTTGA_L005_R1_001.tophat2")
 # test.testReport()
