@@ -13,6 +13,7 @@ exonicPath = "/home/immanuel/Desktop/mm9_bed/exon.bed"
 intronicPath = "/home/immanuel/Desktop/mm9_bed/intron.bed"
 intragenicPath = "/home/immanuel/Desktop/mm9_bed/intragenic.bed"
 intergenicPath = "/home/immanuel/Desktop/mm9_bed/intragenic.bed"
+rRNApath = "/home/immanuel/Desktop/mm9_rRNA.bed"
 totalReads = 51164922.0
 #############################################################
 
@@ -57,8 +58,10 @@ class GetReads(object):
 		return mitochondrial
 	
 	def ribosomal(self):
-		#might require a bowtie or downsampled bwa alignment
-		pass
+		
+		command = "samtools view "+self.dir+"/accepted_hits.bam - L " +rRNApath+ " " + shell_splitUniqe
+		ribosomal = subprocess.check_output(command, shell=True)
+		return ribosomal
 
 class QCReport(object):
 	
@@ -75,9 +78,10 @@ class QCReport(object):
 		intronic = self.rawReads.intron()/rawReads.mappedTotal()
 		intergenic = self.rawReads.intergenic()/rawReads.mappedTotal()
 		chrMTrate = self.rawReads.mitochondrial()/rawReads.mappedTotal()
+		rRNArate = self.rawReads.ribosomal()/rawReads.mappedTotal()
 		#concatenates rates in a tab-delimted string
 		## change name to pass sample name to method
-		sample = "Name" + "\t" + str(mapping) +"\t"+ str(intragenic)+ "\t" + str(exonic) + "\t" + str(intronic) + "\t"+ str(intragenic) + "\t" + str(chrMTrate) + "\n"
+		sample = "Name" + "\t" + str(mapping) +"\t"+ str(intragenic)+ "\t" + str(exonic) + "\t" + str(intronic) + "\t"+ str(intragenic) + "\t" + str(rRNArate)+"\t"+str(chrMTrate) + "\n"
 		return sample
 	
 	def writeReport(self):
