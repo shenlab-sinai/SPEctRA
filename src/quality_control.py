@@ -17,16 +17,20 @@ rRNApath = "/home/immanuel/Desktop/mm9_rRNA.bed"
 totalReads = 51164922.0
 #############################################################
 
+
+
+
+
 class GetReads(object):
 	def __init__(self,dir): #pass directory to this class
 		self.dir = dir
 		
-	def totalReads(self): #figure out how to execute this class properly
-		def tophatTotal(self): #get and return reads in (single and paired) from output file
+	#figure out how to execute this class properly
+	def tophatTotal(self): #get and return reads in (single and paired) from output file
 		#support single and paired
 			#getReadsIn = Utility() 
-			#counts = getReadsIn.openFile(self.dir,"prep_reads.info")
-			print "yo"
+			#counts = GetReaddsIn.openFile(self.dir,"prep_reads.info")
+			pass
 			
 	def mappedTotal(self): #support all alignment outputs  in future
 		command = "samtools view "+self.dir+"/accepted_hits.bam " + shell_splitUniqe
@@ -89,5 +93,4 @@ class QCReport(object):
 		file.write(self.gatherReport())
 		file.close()
 		
-# test = QCReport("/home/immanuel/Documents/Sample_project/mapping/CPU_C4_ACTTGA_L005_R1_001.tophat2")
-# test.testReport()
+test = GetReads("/home/immanuel/Documents/Sample_project/mapping/CPU_C4_ACTTGA_L005_R1_001.tophat2")
