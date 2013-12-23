@@ -11,7 +11,7 @@ shell_splitUniqe = "|cut -f1|sort -u |wc -l" #shell command to count unique read
 ######## temp variables #####################################
 exonicPath = "/home/immanuel/Desktop/mm9_bed/exon.bed"
 intronicPath = "/home/immanuel/Desktop/mm9_bed/intron.bed"
-intragenicPath = "/home/immanuel/Desktop/mm9_bed/intragenic.bed"
+intragenicPath = "/home/immanuel/Desktop/mm9_bed/intragenic.bed"  ###include all this in yaml file
 intergenicPath = "/home/immanuel/Desktop/mm9_bed/intragenic.bed"
 rRNApath = "/home/immanuel/Desktop/mm9_rRNA.bed"
 totalReads = 51164922.0

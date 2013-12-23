@@ -1,4 +1,7 @@
 #!/usr/bin/python
 import os
 import sys
-import ConfigParser
+import yaml
+
+class ImportSettings(object):
+	pass
