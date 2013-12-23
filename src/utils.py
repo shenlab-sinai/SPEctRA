@@ -3,6 +3,7 @@ import os
 import glob
 import sys
 import re
+import ConfigParser
 
 #python class to manage auxilary file/string manipulation
 class Utility(object):
@@ -10,10 +11,8 @@ class Utility(object):
 	def subDirectories(self,dir):
 		return [name for name in os.listdir(dir)
            if os.path.isdir(os.path.join(dir, name))]
-	def openFile(self,dir,fileName):
+	def openFile(self,dir,fileName): #opens file, read only
 		openFile = open(dir+"/"+fileName,"rb")
 		return openFile
-	def mappedBam(self): #get generic mapped reads filename (different from STAR and Tophat2), may move outside of utils class
-		pass
-	def findKey(self,input_dict, value): #dict search method
+	def findKey(self,input_dict, value): #dict search method, find key based on value, returns  all in list
 		return {k for k, v in input_dict.items() if v == value}
