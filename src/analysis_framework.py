@@ -7,6 +7,34 @@ import re
 from utils import *
 
 #Classes/methods to get data and prepare it for specified analysis tasks
+#R wrappers relevent to this class
+
+
+class ProjectEnv(object): #creates project folders (relative paths) before project execution
+	def __init__(self,projDir):
+		self.projDir = projDir
+	def makeDir(self): #makes project directory 
+		os.system("cd "+envDir) #replace envDir with general dir from config
+		os.system("mdkr "+self.projDir)
+	
+		#this will not work
+	def startEnv(self): #add logic to match user input of desired tasks 
+		os.system("cd "+self.projDir)
+		os.system("mkdir mapping")
+		os.system("mkdir QC")
+		os.system("mkdir scripts")
+		os.system("mkdir scripts/mapping")
+		os.system("mkdir scripts/other")#for now
+		os.system("cd "+ envDir+"/"+self.projDir)#final
+
+class GatherUserInputs(object):
+	def proc(self):
+		pass
+	def genome(self):
+		pass
+	def strand(self):
+		pass
+
 
 class GatherData(object):
 	#sort fastq samples to R1 and R2, even if multiple fastqs for one end are available
@@ -22,7 +50,7 @@ class GatherData(object):
 				samples.update({line:read[0]})
 		#return dictionary of values		
 		return samples		
-	#these functions should parse R1 and R2 data and return a string 
+	#these functions parse R1 and R2 data and return a string 
 	def read1(self,fastq):
 		R1 = ",".join([str(x) for x in self.util.findKey(self.studySamples(fastq),'R1')])
 		return R1
@@ -33,13 +61,11 @@ class GatherData(object):
 
 word = ["I_100_bc20_GTGGCC_L001_R1_001.C3H70ACXX.fastq.gz","I_100_bc20_GTGGCC_L001_R2_001.C3H70ACXX.fastq.gz","I_100_bc20_GTGGCC_L002_R1_001.C3H70ACXX.fastq.gz","I_100_bc20_GTGGCC_L002_R2_001.C3H70ACXX.fastq.gz"]
 
-test = GatherData()
-#test.studySamples['R1']
-
-# list comprehension is the best print ",".join([str(x) for x in word])  
-print test.read1(word)
 
 
 
 
-#mydict.keys()[mydict.values().index(16)]
+# util = Utility()
+# test = GatherData()
+# for line in util.subDirectories("/home/immanuel/Desktop/"):
+# 	print test.read1(glob.glob("/home/immanuel/Desktop/"+line+"/*.bed"))
