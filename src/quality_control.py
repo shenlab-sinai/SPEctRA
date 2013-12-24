@@ -14,7 +14,6 @@ intronicPath = "/home/immanuel/Desktop/mm9_bed/intron.bed"
 intragenicPath = "/home/immanuel/Desktop/mm9_bed/intragenic.bed"  ###include all this in yaml file
 intergenicPath = "/home/immanuel/Desktop/mm9_bed/intragenic.bed"
 rRNApath = "/home/immanuel/Desktop/mm9_rRNA.bed"
-totalReads = 51164922.0
 #############################################################
 
 
@@ -26,12 +25,16 @@ class GetReads(object):
 		self.dir = dir
 		
 	#figure out how to execute this class properly
-	def tophatTotal(self): #get and return reads in (single and paired) from output file
-		#support single and paired
-			#getReadsIn = Utility() 
-			#counts = GetReaddsIn.openFile(self.dir,"prep_reads.info")
-			pass
-			
+	def tophatTotal(self): #This needs to be refactored. Temporary solution!
+		
+		getReadsIn = Utility() 
+		counts = getReadsIn.openFile(self.dir,"prep_reads.info")
+		m = re.compile("reads_out")
+		for line in counts:
+			if m.search(line):
+				totalReads = line.strip("reads_out=")
+		return totalReads
+					
 	def mappedTotal(self): #support all alignment outputs  in future
 		command = "samtools view "+self.dir+"/accepted_hits.bam " + shell_splitUniqe
 		mappedReads = subprocess.check_output(command, shell=True)
@@ -94,3 +97,7 @@ class QCReport(object):
 		file.close()
 		
 test = GetReads("/home/immanuel/Documents/Sample_project/mapping/CPU_C4_ACTTGA_L005_R1_001.tophat2")
+print test.tophatTotal()
+
+# test2 = QCReport("/home/immanuel/Documents/Sample_project/mapping/CPU_C4_ACTTGA_L005_R1_001.tophat2")
+# print test2.gatherReport()
