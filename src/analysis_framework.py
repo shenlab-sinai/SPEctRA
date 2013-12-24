@@ -25,7 +25,7 @@ class ProjectEnv(object): #creates project folders (relative paths) before proje
 		os.system("mkdir scripts")
 		os.system("mkdir scripts/mapping")
 		os.system("mkdir scripts/other")#for now
-		os.system("cd "+ envDir+"/"+self.projDir)#final
+		os.system("mkdir differential_analysis")
 
 class GatherUserInputs(object):
 	def proc(self):
