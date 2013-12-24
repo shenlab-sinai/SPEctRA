@@ -17,7 +17,7 @@ rRNApath = "/home/immanuel/Desktop/mm9_rRNA.bed"
 #############################################################
 
 
-
+#add fastqc class here
 
 
 class GetReads(object):

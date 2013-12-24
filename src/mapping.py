@@ -21,10 +21,10 @@ class Mapping(object):
 		return command
 	def STAR(self): #unique pbs/.sh script due to himmem requirements
 		#parse STAR specific parametsrs
-		# STAR --genomeDir /scratch/purusi01/hg19_star_ercc  --readFilesIn /scratch/purusi01/test_10M.fastq  --runThreadN 8
+		#command: STAR --genomeDir /scratch/purusi01/hg19_star_ercc  --readFilesIn /scratch/purusi01/test_10M.fastq  --runThreadN 8
 		command = "STAR --genomeDir $STARgenome --readFilesIn fastqs --readFilesCommand zcat --runThread %s" % (self.proc, )
  		return command
- 		#def shortreadalinger(self) add as needed
+ 	#def shortreadalinger(self) add as needed
 
 class Auxilery(object): #post alignment manipulation 
 
