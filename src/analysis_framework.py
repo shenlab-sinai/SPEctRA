@@ -13,7 +13,7 @@ from utils import *
 class ProjectEnv(object): #creates project folders (relative paths) before project execution
 	def __init__(self,projDir):
 		self.projDir = projDir
-	def makeDir(self): #makes project directory 
+	def makeProj(self): #makes project directory 
 		os.system("cd "+envDir) #replace envDir with general dir from config
 		os.system("mdkr "+self.projDir)
 	
