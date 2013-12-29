@@ -11,12 +11,15 @@ class ImportSettings(object):
 			doc = yaml.load(f)
 		return doc
 	def getEnv(self):
-		pass
+		env = openConfig()[]
+		return env
 	def homeDir(self):
-		pass 
+		path = openConfig()[]
+		return path 
 	def genomes(self):
 		pass
 		#return dict of genomes and their paths
 	def paths(self):
 		#return dict of available short-read aligner paths
 		pass
+
