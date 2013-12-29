@@ -1,0 +1,11 @@
+-mapping
+	- fastQ_directory_path:
+	- proc:
+	- aligner:
+	- genome:
+	- single_or_paired:
+		- strand:
+#npossible entries
+	# time per mapping run (must include qc and counting)
+	# select queue 
+	# 

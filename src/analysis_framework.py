@@ -14,26 +14,27 @@ class ProjectEnv(object): #creates project folders (relative paths) before proje
 	def __init__(self,projDir):
 		self.projDir = projDir
 	def makeProj(self): #makes project directory 
-		os.system("cd "+envDir) #replace envDir with general dir from config
-		os.system("mdkr "+self.projDir)
-	
-		#this will not work
-	def startEnv(self): #add logic to match user input of desired tasks 
-		os.system("cd "+self.projDir)
-		os.system("mkdir mapping")
-		os.system("mkdir QC")
-		os.system("mkdir scripts")
-		os.system("mkdir scripts/mapping")
-		os.system("mkdir scripts/other")#for now
-		os.system("mkdir differential_analysis")
 
-class GatherUserInputs(object):
+		#os.system("cd "+envDir) #replace envDir with general dir from config
+		os.system("mkdir "+envDir+"/"+self.projDir)
+		os.system("mkdir "+envDir+"/"+self.projDir+"/"+"scripts")
+		#this will not work
+	def startMappingEnv(self): #add logic to match user input of desired tasks 
+		os.system("mkdir "+envDir+"/"+self.projDir+"/"+"  mapping")
+		os.system("mkdir "+envDir+"/"+self.projDir+"/"+"QC")
+		os.system("mkdir "+envDir+"/"+self.projDir+"/"+"scripts/mapping")
+		os.system("mkdir "+envDir+"/"+self.projDir+"/"+"scripts/other")#for now
+	#os.system("mkdir "+self.projDir+"/"+"differential_analysis") Add new method to do this later
+
+class UserInputsConfigFile(object): #parses user submitted YAML file ( single command line options should be placed elswhere)
+	def getPath(self):
+		pass
 	def proc(self):
 		pass
 	def genome(self):
 		pass
 	def strand(self):
-		pass
+		pass #single end or paired end options
 
 
 class GatherData(object):
@@ -58,6 +59,15 @@ class GatherData(object):
 	def read2(self,fastq):
 		R2 = ",".join([str(x) for x in self.util.findKey(self.studySamples(fastq),'R2')])
 		return R2
+	#def pairwise(self) ...future parsing of pairwise combinations. Not this sprint
+
+
+
+
+
+
+
+
 
 #word = ["I_100_bc20_GTGGCC_L001_R1_001.C3H70ACXX.fastq.gz","I_100_bc20_GTGGCC_L001_R2_001.C3H70ACXX.fastq.gz","I_100_bc20_GTGGCC_L002_R1_001.C3H70ACXX.fastq.gz","I_100_bc20_GTGGCC_L002_R2_001.C3H70ACXX.fastq.gz"]
 
