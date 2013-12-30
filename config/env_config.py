@@ -3,31 +3,32 @@ import os
 import sys
 import yaml
 
-#these classes are placed in a separate pythfon script
-#because they are ideally to be used for setup and to add new genomes
-
+#parses necessary base variables. 
 
 class ImportSettings(object):
-	def __init__(self, config):
-		self.config = config
+	# def __init__(self, config):
+	# 	self.config = config
 	def openConfig(self):
-		with open('config.yaml', 'r') as f:
+		with open('config_template.yaml', 'r') as f:
 			doc = yaml.load(f)
 		return doc
 	def getEnv(self):
-		env = openConfig()[]
+		env = self.openConfig()["Environment"]
 		return env
 	def homeDir(self): #usually a directory to store all analysis projects
-		path = openConfig()[]
+		path = self.openConfig()["project_directory"]
 		return path 
 	def genomes(self):
-		pass
+		supported = self.openConfig()["genomes"]
+		return supported
 		#return dict of genomes and their paths
 	def mappingPaths(self):
 		#return dict of available short-read aligner paths/modules
-		pass
+		aligner = self.openConfig()["Short-read_aligners"]
+		return aligner
 	def pbsHeader(self):
-		pass
+		header = self.openConfig()["PBS_Headers"]
+		return header
 		#must return string of pbs header for .pbs scripts on minerva
 
 
@@ -36,3 +37,6 @@ class ImportSettings(object):
 
 
 #pbs args may be stored as dictionary or yaml entries for user input
+
+test = ImportSettings()
+print test.pbsHeader()
