@@ -1,10 +1,10 @@
--mapping
-	- fastQ_directory_path:
-	- proc:
-	- aligner:
-	- genome:
-	- single_or_paired:
-		- strand:
+mapping:
+ fastQ_directory_path: /test/
+ proc: 16
+ aligner: tophat2
+ genome: mouse
+ strand: 
+
 #npossible entries
 	# time per mapping run (must include qc and counting)
 	# select queue 
