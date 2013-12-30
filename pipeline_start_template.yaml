@@ -2,7 +2,6 @@ project_Name: test
 mapping:
  fastQ_directory_path: /test/
  proc: 16
- walltime: 
  aligner: tophat2
  genome: mouse
  strand: 

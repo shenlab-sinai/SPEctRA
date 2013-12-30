@@ -4,7 +4,6 @@ import sys
 import yaml
 
 #parses necessary base variables. 
-
 class ImportSettings(object):
 	# def __init__(self, config):
 	# 	self.config = config
