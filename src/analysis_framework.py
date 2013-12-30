@@ -5,7 +5,7 @@ import glob
 import sys
 import re
 from utils import *
-
+from ..config.env_config import env_config
 #Classes/methods to get data and prepare it for specified analysis tasks
 #R wrappers relevent to this class
 

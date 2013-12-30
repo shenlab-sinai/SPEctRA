@@ -1,0 +1,38 @@
+Environment:
+ cluster: Minerva
+ server: 
+project_directory:
+ /home/immanuel/Documents/test_project_pipeline/
+genomes:
+ mouse: 
+  rRNApath:
+  tophat2:   
+   gtf: /home/immanuel/Documents/test_genome/test_genes.gtf
+   index: /home/immanuel/Documents/test_genome/bowtie2Index_test/
+   exonicPath:
+   intronicPath:
+   intragenicPath:
+   intergenicPath:
+  STAR:
+    path:
+
+Short-read_aligners:
+ tophat2: tohpat2
+ bowtie2: bowtie2
+PBS_Headers:
+ q: small_24hr
+ l: 
+  nodes:1
+  ppn:16
+  walltime:"20:00:00"
+ N:
+ o: 
+ e: 
+
+
+#PBS -q small_24hr
+#PBS -l nodes=1:ppn=16
+#PBS -l walltime=20:00:00
+#PBS -N Sample_R9_KO_SN1_DMI_1
+#PBS -o /scratch/purusi01/Vanna_mapping/logs/Sample_R9_KO_SN1_DMI_1.log
+#PBS -e /scratch/purusi01/Vanna_mapping/logs/Sample_R9_KO_SN1_DMI_1.err
