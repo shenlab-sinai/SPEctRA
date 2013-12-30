@@ -9,33 +9,57 @@ from env_config import *
 #Classes/methods to get data and prepare it for specified analysis tasks
 #R wrappers relevent to this class
 
+project = ImportSettings().homeDir()
+
+
 
 class ProjectEnv(object): #creates project folders (relative paths) before project execution
-	def __init__(self,projDir):
+	def __init__(self,projDir,envDir):
 		self.projDir = projDir
+		self.envDir = envDir
+	
+	def test(self): #makes project directory 
+
+		#os.system("cd "+envDir) #replace envDir with general dir from config
+		print "mkdir "+self.projDir
+		print "mkdir "+self.projDir+"/"+"scripts"
+		#this will not work
+
+
 	def makeProj(self): #makes project directory 
 
 		#os.system("cd "+envDir) #replace envDir with general dir from config
-		os.system("mkdir "+envDir+"/"+self.projDir)
-		os.system("mkdir "+envDir+"/"+self.projDir+"/"+"scripts")
+		os.system("mkdir "+self.envDir+"/"+self.projDir)
+		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"scripts")
 		#this will not work
 	def startMappingEnv(self): #add logic to match user input of desired tasks 
-		os.system("mkdir "+envDir+"/"+self.projDir+"/"+"  mapping")
-		os.system("mkdir "+envDir+"/"+self.projDir+"/"+"QC")
-		os.system("mkdir "+envDir+"/"+self.projDir+"/"+"scripts/mapping")
-		os.system("mkdir "+envDir+"/"+self.projDir+"/"+"scripts/other")#for now
+		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"  mapping")
+		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"QC")
+		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"scripts/mapping")
+		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"scripts/other")#for now
 	#os.system("mkdir "+self.projDir+"/"+"differential_analysis") Add new method to do this later
 
-class UserInputsConfigFile(object): #parses user submitted YAML file ( single command line options should be placed elswhere)
-	def getPath(self):
-		pass
-	def proc(self):
-		pass
-	def genome(self):
-		pass
-	def strand(self):
-		pass #single end or paired end options
 
+
+
+class UserInputsConfigFile(object): #parses user submitted YAML file ( single command line options should be placed elswhere)
+
+	def openConfig(self):
+		with open('../pipeline_start_template.yaml', 'r') as f:
+			doc = yaml.load(f)
+		return doc
+	def projName(self):
+		project = self.openConfig()['project_Name']
+		return project
+	def proc(self):
+		procNum = self.openConfig()['mapping']['proc']
+		return procNum
+	def genome(self):
+		ref = self.openConfig()['mapping']['genome']
+		return ref
+	def strand(self):
+		pairedStrand = self.openConfig()['mapping']['strand']
+		return pairedStrand
 
 class GatherData(object):
 	#sort fastq samples to R1 and R2, even if multiple fastqs for one end are available
