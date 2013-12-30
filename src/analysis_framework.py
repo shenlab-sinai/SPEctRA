@@ -6,14 +6,14 @@ import sys
 import re
 from utils import *
 from env_config import *
+from mapping import *
 #Classes/methods to get data and prepare it for specified analysis tasks
 #R wrappers relevent to this class
 
-project = ImportSettings().homeDir()
+settings = ImportSettings()
 
 
-
-class ProjectEnv(object): #creates project folders (relative paths) before project execution
+class SetProjectEnv(object): #creates project folders (relative paths) before project execution
 	def __init__(self,projDir,envDir):
 		self.projDir = projDir
 		self.envDir = envDir
@@ -24,8 +24,6 @@ class ProjectEnv(object): #creates project folders (relative paths) before proje
 		print "mkdir "+self.projDir
 		print "mkdir "+self.projDir+"/"+"scripts"
 		#this will not work
-
-
 	def makeProj(self): #makes project directory 
 
 		#os.system("cd "+envDir) #replace envDir with general dir from config
@@ -39,11 +37,9 @@ class ProjectEnv(object): #creates project folders (relative paths) before proje
 		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"scripts/other")#for now
 	#os.system("mkdir "+self.projDir+"/"+"differential_analysis") Add new method to do this later
 
-
-
-
 class UserInputsConfigFile(object): #parses user submitted YAML file ( single command line options should be placed elswhere)
-
+	# def __init__(self,inputYaml):
+	# 	self.inputYaml = inputYaml
 	def openConfig(self):
 		with open('../pipeline_start_template.yaml', 'r') as f:
 			doc = yaml.load(f)
@@ -60,6 +56,12 @@ class UserInputsConfigFile(object): #parses user submitted YAML file ( single co
 	def strand(self):
 		pairedStrand = self.openConfig()['mapping']['strand']
 		return pairedStrand
+	def aligner(self):
+		mapper = self.openConfig()['mapping']['aligner']
+		return mapper
+	def fastQdir(self):
+		data = self.openConfig()['mapping']['fastQ_directory_path']
+		return data
 
 class GatherData(object):
 	#sort fastq samples to R1 and R2, even if multiple fastqs for one end are available
@@ -84,6 +86,23 @@ class GatherData(object):
 		R2 = ",".join([str(x) for x in self.util.findKey(self.studySamples(fastq),'R2')])
 		return R2
 	#def pairwise(self) ...future parsing of pairwise combinations. Not this sprint
+
+class ScriptWriter(object):
+	util = Utility()
+	fastqs = GatherData()
+	inputs = UserInputsConfigFile()
+
+	def writeMappingScript(self,fastqPath): #writes mapping script
+		for line in self.util.subDirectories(fastqPath):
+			sample = glob.glob(fastqPath+"/"+line+"/*.fastq.gz")
+			outdir = self.inputs.projName()+"/"+line+"."+ self.inputs.aligner()
+			align = Mapping(self.fastqs.read1(sample),2, outdir,settings.genomes()[self.inputs.genome()][self.inputs.aligner()],self.fastqs.read2(sample))
+			print align.tophat()
+
+test = ScriptWriter()
+
+test.writeMappingScript("/home/immanuel/Documents/test_project/test_data")
+
 
 
 

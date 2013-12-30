@@ -7,17 +7,18 @@ import pysam
 #executes mapping tool of choice
 #use separate class to parse input params
 class Mapping(object):
-	def __init__(self,fastqR1,proc,genome,libType="unstranded",fastqR2 = ""):
+	def __init__(self,fastqR1,proc,outdir,genome,libType="unstranded",fastqR2 = ""):
 		self.fastqR1 = fastqR1
 		self.fastqR2 = fastqR2
 		self.libType = libType
 		self.proc = proc
 		self.genome = genome
+		self.outdir = outdir
 	
 	def tophat(self):
 		#parse tophat specific parameters
 		#command: tophat2 --library-type fr-unstranded --no-novel-juncs --b2-very-sensitive -p 16 -G  $GTF -o $OUTDIR $BOWTIE_INDEX $SAMPLE (must be list)
-		command = "tophat2 --library-type %s --no-novel-juncs --b2-very-sensitive -p %s -G $GTF -o $outdir $BOWTIE_INDEX $SAMPLE" % (self.libType, self.proc,)
+		command = "tophat2 --library-type %s --no-novel-juncs --b2-very-sensitive -p %s -G %s -o %s %s  %s %s" % (self.libType, self.proc,self.genome["gtf"],self.outdir,self.genome["index"],self.fastqR1,self.fastqR2)
 		return command
 	def STAR(self): #unique pbs/.sh script due to himmem requirements
 		#parse STAR specific parametsrs
