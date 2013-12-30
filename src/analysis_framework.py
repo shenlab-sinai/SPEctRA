@@ -96,7 +96,7 @@ class ScriptWriter(object):
 		for line in self.util.subDirectories(fastqPath):
 			sample = glob.glob(fastqPath+"/"+line+"/*.fastq.gz")
 			outdir = self.inputs.projName()+"/"+line+"."+ self.inputs.aligner()
-			align = Mapping(self.fastqs.read1(sample),2, outdir,settings.genomes()[self.inputs.genome()][self.inputs.aligner()],self.fastqs.read2(sample))
+			align = Mapping(self.fastqs.read1(sample),self.inputs.proc(), outdir,settings.genomes()[self.inputs.genome()][self.inputs.aligner()],fastqR2=self.fastqs.read2(sample))
 			print align.tophat()
 
 test = ScriptWriter()
