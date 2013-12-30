@@ -93,11 +93,22 @@ class ScriptWriter(object):
 	inputs = UserInputsConfigFile()
 
 	def writeMappingScript(self,fastqPath): #writes mapping script
+		# star command in one script, himem
 		for line in self.util.subDirectories(fastqPath):
 			sample = glob.glob(fastqPath+"/"+line+"/*.fastq.gz")
 			outdir = self.inputs.projName()+"/"+line+"."+ self.inputs.aligner()
 			align = Mapping(self.fastqs.read1(sample),self.inputs.proc(), outdir,settings.genomes()[self.inputs.genome()][self.inputs.aligner()],fastqR2=self.fastqs.read2(sample))
-			print align.tophat()
+			
+			
+			if self.inputs.aligner() == "tophat2":
+				if settings.getEnv()["cluster"] is not 'None':
+					#open file
+					#print tophat
+					#close file
+
+			#print aux
+
+			#print QC
 
 test = ScriptWriter()
 
