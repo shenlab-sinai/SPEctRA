@@ -81,7 +81,6 @@ class ScriptWriter(object):
 	util = Utility()
 	fastqs = GatherData()
 	
-
 	def writeMappingScript(self,userInput): #writes mapping script
 		
 		inputs = UserInputsConfigFile(userInput)
@@ -103,11 +102,3 @@ class ScriptWriter(object):
 					#insert QC
 					file.close()
 			#star logic
-# test = ScriptWriter()
-# test.writeMappingScript("/home/immanuel/Documents/Projects/complete-seq/pipeline_start_template.yaml")
-
-
-
-# test = GatherData()
-# for line in util.subDirectories("/home/immanuel/Desktop/"):
-# 	print test.read1(glob.glob("/home/immanuel/Desktop/"+line+"/*.bed"))

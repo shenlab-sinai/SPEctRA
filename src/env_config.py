@@ -30,6 +30,9 @@ class ImportSettings(object):
 		return header
 		#must return string of pbs header for .pbs scripts on minerva
 
+class ClusterSettings(object):
+
+	def PBSdefaults(self):
 
 #create separate setup.py-type file for pipeline setup and update
 	#update genome list class to update genome dictionary
