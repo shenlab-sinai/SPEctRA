@@ -94,7 +94,9 @@ class ScriptWriter(object):
 
 	def writeMappingScript(self,fastqPath): #writes mapping script
 		# star command in one script, himem
+		#mkdir and change script location to more generalized directory name
 		for line in self.util.subDirectories(fastqPath):
+			
 			sample = glob.glob(fastqPath+"/"+line+"/*.fastq.gz")
 			outdir = self.inputs.projName()+"/"+line+"."+ self.inputs.aligner()
 			align = Mapping(self.fastqs.read1(sample),self.inputs.proc(), outdir,settings.genomes()[self.inputs.genome()][self.inputs.aligner()],fastqR2=self.fastqs.read2(sample))
@@ -102,16 +104,16 @@ class ScriptWriter(object):
 			
 			if self.inputs.aligner() == "tophat2":
 				if settings.getEnv()["cluster"] is not 'None':
-					#open file
-					#print tophat
-					#close file
-
-			#print aux
-
-			#print QC
+					file = open(self.inputs.projName()+"/"+"scripts/mapping"+line+"tophat2.mapping.pbs", "w") #change to relative path
+					#insert pbs headers
+					#insert load modules
+					file.write(str(align.tophat()))
+					#insert post-processing
+					#insert QC
+					file.close()
+			#star logic
 
 test = ScriptWriter()
-
 test.writeMappingScript("/home/immanuel/Documents/test_project/test_data")
 
 
