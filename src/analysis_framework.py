@@ -93,9 +93,8 @@ class ScriptWriter(object):
 			outdir = inputs.projName()+"/"+line+"."+ inputs.aligner()
 			align = Mapping(self.fastqs.read1(sample),inputs.proc(), outdir,settings.genomes()[inputs.genome()][inputs.aligner()],fastqR2=self.fastqs.read2(sample))
 			
-
-			if inputs.aligner() == "tophat2":
-				if settings.getEnv()["cluster"] is not 'None':
+			if inputs.aligner() == "tophat2": #logic for tophat alignment...
+				if settings.getEnv()["cluster"] is not 'None': #...on a cluster such as minerva
 					file = open(settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/mapping/"+line+".tophat2.mapping.pbs", "w") #change to relative path
 					#insert pbs headers
 					#insert load modules
