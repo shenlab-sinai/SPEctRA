@@ -1,8 +1,7 @@
 Environment:
  cluster: Minerva
  server: 
-project_directory:
- /home/immanuel/Documents/test_project_pipeline/
+project_directory: /home/immanuel/Documents/test_project_pipeline/
 genomes:
  mouse: 
   rRNApath:

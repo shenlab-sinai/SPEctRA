@@ -7,41 +7,31 @@ import re
 from utils import *
 from env_config import *
 from mapping import *
+
 #Classes/methods to get data and prepare it for specified analysis tasks
 #R wrappers relevent to this class
 
 settings = ImportSettings()
 
-
 class SetProjectEnv(object): #creates project folders (relative paths) before project execution
-	def __init__(self,projDir,envDir):
+	def __init__(self,envDir,projDir):
 		self.projDir = projDir
 		self.envDir = envDir
-	
-	def test(self): #makes project directory 
-
-		#os.system("cd "+envDir) #replace envDir with general dir from config
-		print "mkdir "+self.projDir
-		print "mkdir "+self.projDir+"/"+"scripts"
-		#this will not work
 	def makeProj(self): #makes project directory 
-
-		#os.system("cd "+envDir) #replace envDir with general dir from config
 		os.system("mkdir "+self.envDir+"/"+self.projDir)
 		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"scripts")
-		#this will not work
 	def startMappingEnv(self): #add logic to match user input of desired tasks 
-		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"  mapping")
+		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"mapping")
 		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"QC")
 		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"scripts/mapping")
 		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"scripts/other")#for now
 	#os.system("mkdir "+self.projDir+"/"+"differential_analysis") Add new method to do this later
 
 class UserInputsConfigFile(object): #parses user submitted YAML file ( single command line options should be placed elswhere)
-	# def __init__(self,inputYaml):
-	# 	self.inputYaml = inputYaml
+	def __init__(self,inputYaml):
+	 	self.inputYaml = inputYaml
 	def openConfig(self):
-		with open('../pipeline_start_template.yaml', 'r') as f:
+		with open(str(self.inputYaml), 'r') as f:
 			doc = yaml.load(f)
 		return doc
 	def projName(self):
@@ -90,48 +80,35 @@ class GatherData(object):
 class ScriptWriter(object):
 	util = Utility()
 	fastqs = GatherData()
-	inputs = UserInputsConfigFile()
+	
 
-	def writeMappingScript(self,fastqPath): #writes mapping script
+	def writeMappingScript(self,userInput): #writes mapping script
+		
+		inputs = UserInputsConfigFile(userInput)
 		# star command in one script, himem
 		#mkdir and change script location to more generalized directory name
-		for line in self.util.subDirectories(fastqPath):
+		for line in self.util.subDirectories(inputs.fastQdir()):
 			
-			sample = glob.glob(fastqPath+"/"+line+"/*.fastq.gz")
-			outdir = self.inputs.projName()+"/"+line+"."+ self.inputs.aligner()
-			align = Mapping(self.fastqs.read1(sample),self.inputs.proc(), outdir,settings.genomes()[self.inputs.genome()][self.inputs.aligner()],fastqR2=self.fastqs.read2(sample))
+			sample = glob.glob(inputs.fastQdir()+"/"+line+"/*.fastq.gz")
+			outdir = inputs.projName()+"/"+line+"."+ inputs.aligner()
+			align = Mapping(self.fastqs.read1(sample),inputs.proc(), outdir,settings.genomes()[inputs.genome()][inputs.aligner()],fastqR2=self.fastqs.read2(sample))
 			
-			
-			if self.inputs.aligner() == "tophat2":
+
+			if inputs.aligner() == "tophat2":
 				if settings.getEnv()["cluster"] is not 'None':
-					file = open(self.inputs.projName()+"/"+"scripts/mapping"+line+"tophat2.mapping.pbs", "w") #change to relative path
+					file = open(settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/mapping/"+line+".tophat2.mapping.pbs", "w") #change to relative path
 					#insert pbs headers
 					#insert load modules
-					file.write(str(align.tophat()))
+					file.write(str(align.tophat()+"\n"))
 					#insert post-processing
 					#insert QC
 					file.close()
 			#star logic
-
-test = ScriptWriter()
-test.writeMappingScript("/home/immanuel/Documents/test_project/test_data")
-
+# test = ScriptWriter()
+# test.writeMappingScript("/home/immanuel/Documents/Projects/complete-seq/pipeline_start_template.yaml")
 
 
 
-
-
-
-
-
-
-#word = ["I_100_bc20_GTGGCC_L001_R1_001.C3H70ACXX.fastq.gz","I_100_bc20_GTGGCC_L001_R2_001.C3H70ACXX.fastq.gz","I_100_bc20_GTGGCC_L002_R1_001.C3H70ACXX.fastq.gz","I_100_bc20_GTGGCC_L002_R2_001.C3H70ACXX.fastq.gz"]
-
-
-
-
-
-# util = Utility()
 # test = GatherData()
 # for line in util.subDirectories("/home/immanuel/Desktop/"):
 # 	print test.read1(glob.glob("/home/immanuel/Desktop/"+line+"/*.bed"))

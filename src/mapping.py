@@ -33,7 +33,7 @@ class Auxilery(object): #post alignment manipulation
 	def tophat(self):
  		
  		tophat_prep=""
- 		return tophat_prep#indexBam
+ 		return tophat_prep #indexBam
  		pass
  	def STAR(self):
  		pass
