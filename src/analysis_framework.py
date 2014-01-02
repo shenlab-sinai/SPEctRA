@@ -89,16 +89,18 @@ class ScriptWriter(object):
 		for line in self.util.subDirectories(inputs.fastQdir()):
 			
 			sample = glob.glob(inputs.fastQdir()+"/"+line+"/*.fastq.gz")
-			outdir = inputs.projName()+"/"+line+"."+ inputs.aligner()
+			outdir = settings.homeDir()+"/"+inputs.projName()+"/mapping/"+line+"."+ inputs.aligner()
 			align = Mapping(self.fastqs.read1(sample),inputs.proc(), outdir,settings.genomes()[inputs.genome()][inputs.aligner()],fastqR2=self.fastqs.read2(sample))
 			
 			if inputs.aligner() == "tophat2": #logic for tophat alignment...
 				if settings.getEnv()["cluster"] is not 'None': #...on a cluster such as minerva
 					file = open(settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/mapping/"+line+".tophat2.mapping.pbs", "w") #change to relative path
 					#insert pbs headers
+					file.write(settings.pbsHeader(inputs.projName()+"."+line,settings.homeDir()+"/logs",str(inputs.proc())))
 					#insert load modules
 					file.write(str(align.tophat()+"\n"))
 					#insert post-processing
 					#insert QC
+					file.write("python quality_control.py " + outdir)
 					file.close()
 			#star logic

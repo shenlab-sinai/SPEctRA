@@ -79,6 +79,7 @@ class QCReport(object):
 	
 	#@dd decorator
 	def gatherReport(self): #computes rates 
+		print "Proceeding with QC step..."
 		mapping = self.rawReads.mitochondrial()  / totalReads
 		intragenic = self.rawReads.intragenic()/rawReads.mappedTotal()
 		exonic = self.rawReads.exon()/rawReads.mappedTotal()
@@ -91,13 +92,15 @@ class QCReport(object):
 		sample = "Name" + "\t" + str(mapping) +"\t"+ str(intragenic)+ "\t" + str(exonic) + "\t" + str(intronic) + "\t"+ str(intragenic) + "\t" + str(rRNArate)+"\t"+str(chrMTrate) + "\n"
 		return sample
 	
-	def writeReport(self):
-		file = open("sample.txt", "w") #change to relative path
+	def writeReport(self,fileName):
+		file = open(fileName+".qcMetrics.txt", "w") #change to relative path
 		file.write(self.gatherReport())
 		file.close()
 		
-test = GetReads("/home/immanuel/Documents/Sample_project/mapping/CPU_C4_ACTTGA_L005_R1_001.tophat2")
-print test.tophatTotal()
+# test = GetReads("/home/immanuel/Documents/Sample_project/mapping/CPU_C4_ACTTGA_L005_R1_001.tophat2")
+# print test.tophatTotal()
 
 # test2 = QCReport("/home/immanuel/Documents/Sample_project/mapping/CPU_C4_ACTTGA_L005_R1_001.tophat2")
 # print test2.gatherReport()
+runQC = QCReport(sys.argv[1])
+test2.gatherReport()

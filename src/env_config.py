@@ -8,7 +8,7 @@ class ImportSettings(object):
 	# def __init__(self, config):
 	# 	self.config = config
 	def openConfig(self):
-		with open('config_template.yaml', 'r') as f:
+		with open("/home/immanuel/Documents/Projects/complete-seq/src/config_template.yaml", 'r') as f:
 			doc = yaml.load(f)
 		return doc
 	def getEnv(self):
@@ -25,14 +25,18 @@ class ImportSettings(object):
 		#return dict of available short-read aligner paths/modules
 		aligner = self.openConfig()["Short-read_aligners"]
 		return aligner
-	def pbsHeader(self):
-		header = self.openConfig()["PBS_Headers"]
-		return header
-		#must return string of pbs header for .pbs scripts on minerva
-
-class ClusterSettings(object):
-
-	def PBSdefaults(self):
+	def pbsHeader(self,name,directory,proc,time="24:00:00", nodes ="1",queue="small_24hr"):
+		env = "#!/bin/bash"+"\n"
+		acc = "" #PBS -A acc_80"+"\n"
+		queue= "#PBS -q "+queue+"\n"
+		proc = "#PBS -l nodes="+nodes+":ppn="+proc+"\n"
+		time = "#PBS -l walltime="+time+"\n"
+		jobID = "#PBS -N "+name+"\n"
+		log = "#PBS -o "+directory+"/"+ name+".log"+"\n"
+		err = "#PBS -e "+directory+"/"+ name+".log"+"\n"
+		header = env + acc+queue+proc + time + jobID + log + err + "\n"
+		return header  
+# 	def openConfig(self):
 
 #create separate setup.py-type file for pipeline setup and update
 	#update genome list class to update genome dictionary
