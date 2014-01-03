@@ -13,6 +13,7 @@ from mapping import *
 
 settings = ImportSettings()
 
+
 class SetProjectEnv(object): #creates project folders (relative paths) before project execution
 	def __init__(self,envDir,projDir):
 		self.projDir = projDir
@@ -20,10 +21,12 @@ class SetProjectEnv(object): #creates project folders (relative paths) before pr
 	def makeProj(self): #makes project directory 
 		os.system("mkdir "+self.envDir+"/"+self.projDir)
 		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"scripts")
+		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"logs")
 	def startMappingEnv(self): #add logic to match user input of desired tasks 
 		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"mapping")
 		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"QC")
 		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"scripts/mapping")
+		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"logs/mapping")
 		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"scripts/other")#for now
 	#os.system("mkdir "+self.projDir+"/"+"differential_analysis") Add new method to do this later
 
@@ -96,11 +99,12 @@ class ScriptWriter(object):
 				if settings.getEnv()["cluster"] is not 'None': #...on a cluster such as minerva
 					file = open(settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/mapping/"+line+".tophat2.mapping.pbs", "w") #change to relative path
 					#insert pbs headers
-					file.write(settings.pbsHeader(inputs.projName()+"."+line,settings.homeDir()+"/logs",str(inputs.proc())))
+					file.write(settings.pbsHeader(inputs.projName()+"."+line,settings.homeDir(),str(inputs.proc())))
 					#insert load modules
 					file.write(str(align.tophat()+"\n"))
 					#insert post-processing
-					#insert QC
-					file.write("python quality_control.py " + outdir)
+					#insert QC 
+					#file.write("python quality_control.py " + outdir + " " + inputs.genome()) #uncomment this when you fix this class
 					file.close()
 			#star logic
+ 

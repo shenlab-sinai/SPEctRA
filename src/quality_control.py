@@ -5,8 +5,10 @@ import pysam
 import os
 import csv
 import subprocess
+from env_config import *
+from analysis_framework import *
 
-shell_splitUniqe = "|cut -f1|sort -u |wc -l" #shell command to count unique reads only
+shell_splitUnique = "|cut -f1|sort -u |wc -l" #shell command to count unique reads only
 
 ######## temp variables #####################################
 exonicPath = "/home/immanuel/Desktop/mm9_bed/exon.bed"
@@ -17,12 +19,17 @@ rRNApath = "/home/immanuel/Desktop/mm9_rRNA.bed"
 #############################################################
 
 
+settings = ImportSettings()
+
+
+
 #add fastqc class here
 
 
 class GetReads(object):
-	def __init__(self,dir): #pass directory to this class
+	def __init__(self,dir,genome): #pass directory to this class
 		self.dir = dir
+		self.genome = genome
 		
 	#figure out how to execute this class properly
 	def tophatTotal(self): #This needs to be refactored. Temporary solution!
@@ -36,27 +43,28 @@ class GetReads(object):
 		return totalReads
 					
 	def mappedTotal(self): #support all alignment outputs  in future
-		command = "samtools view "+self.dir+"/accepted_hits.bam " + shell_splitUniqe
+		command = "samtools view "+self.dir+"/accepted_hits.bam " + shell_splitUnique
 		mappedReads = subprocess.check_output(command, shell=True)
 		return mappedReads
 	#individual mapping rates
 	def intragenic(self): 
-		command = "samtools view "+self.dir+"/accepted_hits.bam -L "+ intragenicPath + " " + shell_splitUniqe
+		command = "samtools view "+self.dir+"/accepted_hits.bam -L "+ intragenicPath + " " + shell_splitUnique
 		intragenic = subprocess.check_output(command, shell=True)
 		return intragenic
 	
 	def exon(self):
-		command = "samtools view "+self.dir+"/accepted_hits.bam -L "+ exonicPath + " " + shell_splitUniqe
+		command = "samtools view "+self.dir+"/accepted_hits.bam -L "+ settings.genomes()[self.genome]["exonicPath"] + " " + shell_splitUnique
 		exon = subprocess.check_output(command, shell=True)
 		return exon
+
 	
 	def intron(self):
-		command = "samtools view "+self.dir+"/accepted_hits.bam -L "+ intronicPath + " " + shell_splitUniqe
+		command = "samtools view "+self.dir+"/accepted_hits.bam -L "+ intronicPath + " " + shell_splitUnique
 		intron = subprocess.check_output(command, shell=True)
 		return intron
 	
 	def intergenic(self):
-		command = "samtools view "+self.dir+"/accepted_hits.bam -L "+ intergenicPath + " " + shell_splitUniqe
+		command = "samtools view "+self.dir+"/accepted_hits.bam -L "+ settings.genomes()[self.genome]["intergenicPath"] + " " + shell_splitUnique
 		intergenic = subprocess.check_output(command, shell=True)
 		return intergenic
 	
@@ -66,16 +74,17 @@ class GetReads(object):
 	
 	def ribosomal(self):
 		
-		command = "samtools view "+self.dir+"/accepted_hits.bam - L " +rRNApath+ " " + shell_splitUniqe
+		command = "samtools view "+self.dir+"/accepted_hits.bam - L " +settings.genomes()[self.genome]["rRNApath"]+ " " + shell_splitUnique
 		ribosomal = subprocess.check_output(command, shell=True)
 		return ribosomal
 
 class QCReport(object):
 	
-	def __init__(self,dir): #pass directory to this class
+	def __init__(self,dir,genome): #pass directory to this class
 		
 		self.dir = dir
-		self.rawReads = GetReads(dir)
+		self.genome = genome
+		self.rawReads = GetReads(dir,ref.genome)
 	
 	#@dd decorator
 	def gatherReport(self): #computes rates 
@@ -102,5 +111,8 @@ class QCReport(object):
 
 # test2 = QCReport("/home/immanuel/Documents/Sample_project/mapping/CPU_C4_ACTTGA_L005_R1_001.tophat2")
 # print test2.gatherReport()
-runQC = QCReport(sys.argv[1])
+
+
+runQC = QCReport(sys.argv[1],sys.argv[2])
 test2.gatherReport()
+

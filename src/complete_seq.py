@@ -13,15 +13,17 @@ settings = ImportSettings() #enviroment configuration settings
 util = Utility()
 def main():
 	
-
+	#mapping
 	pipeline_command = UserInputsConfigFile(options.pipeline_input)
-	directories  = SetProjectEnv(settings.homeDir(),pipeline_command.projName())
-	writer = ScriptWriter() #simplify this
-	
-	directories.makeProj() #project directory created
-	directories.startMappingEnv() #mapping subdirectories created
-	writer.writeMappingScript(options.pipeline_input)
-	util.batchQsub(settings.homeDir()+"/"+pipeline_command.projName()+"/scripts/mapping/")
+	if pipeline_command.openConfig()["mapping"] is not None:
+
+		directories  = SetProjectEnv(settings.homeDir(),pipeline_command.projName())
+		writer = ScriptWriter() #simplify this
+		
+		directories.makeProj() #project directory created
+		directories.startMappingEnv() #mapping subdirectories created
+		writer.writeMappingScript(options.pipeline_input)
+		util.batchQsub(settings.homeDir()+"/"+pipeline_command.projName()+"/scripts/mapping/")
 
 if __name__ == '__main__':
     main()

@@ -8,7 +8,9 @@ class ImportSettings(object):
 	# def __init__(self, config):
 	# 	self.config = config
 	def openConfig(self):
-		with open("/home/immanuel/Documents/Projects/complete-seq/src/config_template.yaml", 'r') as f:
+		dir = os.path.dirname(__file__)
+		filename = os.path.join(dir, "config_template.yaml")
+		with open(filename, 'r') as f:
 			doc = yaml.load(f)
 		return doc
 	def getEnv(self):
@@ -25,15 +27,15 @@ class ImportSettings(object):
 		#return dict of available short-read aligner paths/modules
 		aligner = self.openConfig()["Short-read_aligners"]
 		return aligner
-	def pbsHeader(self,name,directory,proc,time="24:00:00", nodes ="1",queue="small_24hr"):
+	def pbsHeader(self,name,directory,proc,time="24:00:00", nodes ="1",queue="small_24hr"): #hardcoded for minerva args. Change this to be more flexible
 		env = "#!/bin/bash"+"\n"
 		acc = "" #PBS -A acc_80"+"\n"
 		queue= "#PBS -q "+queue+"\n"
 		proc = "#PBS -l nodes="+nodes+":ppn="+proc+"\n"
 		time = "#PBS -l walltime="+time+"\n"
 		jobID = "#PBS -N "+name+"\n"
-		log = "#PBS -o "+directory+"/"+ name+".log"+"\n"
-		err = "#PBS -e "+directory+"/"+ name+".log"+"\n"
+		log = "#PBS -o "+directory+"/logs/mapping/"+ name+".log"+"\n"
+		err = "#PBS -e "+directory+"/logs/mapping/"+ name+".log"+"\n"
 		header = env + acc+queue+proc + time + jobID + log + err + "\n"
 		return header  
 # 	def openConfig(self):
