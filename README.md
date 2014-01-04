@@ -1,6 +1,6 @@
 Complete-Seq RNAseq Pipeline:
 
-Ready to test on Minerva cluster to generate PBS scripts for tophat mapping jobs first (Server functionality in the works, as well as generalized PBS environment deployment)
+Ready to test on Minerva cluster to generate and launch PBS scripts for tophat mapping jobs first (Server functionality in the works, as well as generalized PBS environment deployment)
 
 To begin testing:
   1. Login to Minerva
