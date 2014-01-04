@@ -1,7 +1,7 @@
-project_Name: test
+project_Name: 
 mapping:
- fastQ_directory_path: /home/immanuel/Documents/test_project/test_data
- proc: 16
- aligner: tophat2
- genome: mouse
+ fastQ_directory_path: 
+ proc: 
+ aligner: 
+ genome: 
  strand: 

@@ -1,21 +1,21 @@
 Environment:
  cluster: Minerva
  server: 
-project_directory: /home/immanuel/Documents/test_project_pipeline/
+project_directory: /scratch/username/RNAseq_projects/
 Short-read_aligners:
- tophat2: tohpat2
- bowtie2: bowtie2
- STAR: STAR
-genomes:
+ tophat2: tophat/2.0.9
+ bowtie2: bowtie2/2.1.0
+ STAR: rna-star/2.3.0e
+genomes: 
  mouse: 
-  rRNApath:
-  tophat2:   
-   gtf: /home/immanuel/Documents/test_genome/test_genes.gtf
-   index: /home/immanuel/Documents/test_genome/bowtie2Index_test/
-  exonicPath: /test/
+  rRNApath: 
+  tophat2:  
+   gtf: /scratch/username/genomes/Mus_musculus/Ensembl/NCBIM37/Annotation/Genes/genes.gtf
+   index: /scratch/username/genomes/Mus_musculus/Ensembl/NCBIM37/Sequence/Bowtie2Index
+  exonicPath: 
   intronicPath:
   intragenicPath:
   intergenicPath:
   STAR:
-    path:
+    path: /scratch/username/mm9_star
 
