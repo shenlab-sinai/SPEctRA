@@ -101,10 +101,13 @@ class ScriptWriter(object):
 					#insert pbs headers
 					file.write(settings.pbsHeader(inputs.projName()+"."+line,settings.homeDir(),str(inputs.proc())))
 					#insert load modules
+					file.write("module load samtools"+"\n"+"module load " + settings.mappingPaths()['bowtie2'] +"\n"+"module load " + settings.mappingPaths()['tophat2'] +"\n")
+					#bowtie Index
+					file.write("export BOWTIE2_INDEXES="+settings.genomes()[inputs.genome()][inputs.aligner()]['index'])
 					file.write(str(align.tophat()+"\n"))
 					#insert post-processing
 					#insert QC 
 					#file.write("python quality_control.py " + outdir + " " + inputs.genome()) #uncomment this when you fix this class
 					file.close()
 			#star logic
- 
+ d
