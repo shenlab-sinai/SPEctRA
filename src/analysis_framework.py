@@ -99,7 +99,7 @@ class ScriptWriter(object):
 				if settings.getEnv()["cluster"] is not 'None': #...on a cluster such as minerva
 					file = open(settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/mapping/"+line+".tophat2.mapping.pbs", "w") #change to relative path
 					#insert pbs headers
-					file.write(settings.pbsHeader(inputs.projName()+"."+line,settings.homeDir(),str(inputs.proc())))
+					file.write(settings.pbsHeader(inputs.projName()+"."+line,settings.homeDir(),inputs.projName(),str(inputs.proc())))
 					#insert load modules
 					file.write("module load samtools"+"\n"+"module load " + settings.mappingPaths()['bowtie2'] +"\n"+"module load " + settings.mappingPaths()['tophat2'] +"\n")
 					#bowtie Index
