@@ -7,7 +7,7 @@ import pysam
 #executes mapping tool of choice
 #use separate class to parse input params
 class Mapping(object):
-	def __init__(self,fastqR1,proc,outdir,genome,libType="unstranded",fastqR2 = ""):
+	def __init__(self,fastqR1,proc,outdir,genome,libType="fr-unstranded",fastqR2 = ""):
 		self.fastqR1 = fastqR1
 		self.fastqR2 = fastqR2
 		self.libType = libType
