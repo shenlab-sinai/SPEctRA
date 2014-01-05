@@ -103,7 +103,7 @@ class ScriptWriter(object):
 					#insert load modules
 					file.write("module load samtools"+"\n"+"module load " + settings.mappingPaths()['bowtie2'] +"\n"+"module load " + settings.mappingPaths()['tophat2'] +"\n")
 					#bowtie Index
-					file.write("export BOWTIE2_INDEXES="+settings.genomes()[inputs.genome()][inputs.aligner()]['index'])
+					file.write("export BOWTIE2_INDEXES="+settings.genomes()[inputs.genome()][inputs.aligner()]['index'] +"\n")
 					file.write(str(align.tophat()+"\n"))
 					#insert post-processing
 					#insert QC 
