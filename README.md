@@ -1,5 +1,10 @@
 Complete-Seq RNAseq Pipeline:
 
+Dependencies:
+ - Python version 2.7 
+ - PyYAML
+ - Pysam
+
 Ready to test on Minerva cluster to generate and launch PBS scripts for tophat mapping jobs first (Server functionality in the works, as well as generalized PBS environment deployment)
 
 To begin testing:
