@@ -23,7 +23,7 @@ class Mapping(object):
 	def STAR(self): #unique pbs/.sh script due to himmem requirements
 		#parse STAR specific parametsrs
 		#command: STAR --genomeDir /scratch/purusi01/hg19_star_ercc  --readFilesIn /scratch/purusi01/test_10M.fastq  --runThreadN 8
-		command = "STAR --genomeDir %s --readFilesIn fastqs --readFilesCommand zcat --runThread %s" % (self.genome["path"],self.proc,)
+		command = "STAR --genomeDir %s --readFilesIn %s %s--readFilesCommand zcat --runThread %s" % (self.genome["path"],self.fastqR1,self.fastqR2,self.proc,)
  		return command
  	#def shortreadalinger(self) add as needed
 

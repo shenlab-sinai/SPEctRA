@@ -94,7 +94,7 @@ class ScriptWriter(object):
 			if settings.getEnv()["cluster"] is not 'None': 
 				file = open(settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/mapping/"+inputs.projName()+".STAR.mapping.pbs", "w")
 				file.write(settings.pbsHeader(inputs.projName()+".STAR",settings.homeDir(),inputs.projName(),str(inputs.proc()))+"\n")
-
+				
 		for line in self.util.subDirectories(inputs.fastQdir()):
 			
 			sample = glob.glob(inputs.fastQdir()+"/"+line+"/*.fastq.gz")
@@ -102,7 +102,9 @@ class ScriptWriter(object):
 			align = Mapping(self.fastqs.read1(sample),inputs.proc(), outdir,settings.genomes()[inputs.genome()][inputs.aligner()],fastqR2=self.fastqs.read2(sample))
 			
 			if inputs.aligner() == "STAR": #opens a single STAR mapping pbs file (himem queues only)
-				if settings.getEnv()["cluster"] is not 'None': 
+				if settings.getEnv()["cluster"] is not 'None':
+					file.write("mkdir "+outdir+"\n") 
+					file.write("cd "+outdir+"\n")
 					file.write(str(align.STAR()+"\n"))
 
 			if inputs.aligner() == "tophat2": #logic for tophat alignment...
@@ -118,5 +120,5 @@ class ScriptWriter(object):
 					#insert post-processing
 					#insert QC 
 					#file.write("python quality_control.py " + outdir + " " + inputs.genome()) #uncomment this when you fix this class
-					file.close()
+		file.close()
 			#star logic
