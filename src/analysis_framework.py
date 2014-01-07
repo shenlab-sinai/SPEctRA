@@ -89,12 +89,22 @@ class ScriptWriter(object):
 		inputs = UserInputsConfigFile(userInput)
 		# star command in one script, himem
 		#mkdir and change script location to more generalized directory name
+		
+		if inputs.aligner() == "STAR": #opens a single STAR mapping pbs file (himem queues only)
+			if settings.getEnv()["cluster"] is not 'None': 
+				file = open(settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/mapping/"+inputs.projName()+".STAR.mapping.pbs", "w")
+				file.write(settings.pbsHeader(inputs.projName()+".STAR",settings.homeDir(),inputs.projName(),str(inputs.proc()))+"\n")
+
 		for line in self.util.subDirectories(inputs.fastQdir()):
 			
 			sample = glob.glob(inputs.fastQdir()+"/"+line+"/*.fastq.gz")
 			outdir = settings.homeDir()+"/"+inputs.projName()+"/mapping/"+line+"."+ inputs.aligner()
 			align = Mapping(self.fastqs.read1(sample),inputs.proc(), outdir,settings.genomes()[inputs.genome()][inputs.aligner()],fastqR2=self.fastqs.read2(sample))
 			
+			if inputs.aligner() == "STAR": #opens a single STAR mapping pbs file (himem queues only)
+				if settings.getEnv()["cluster"] is not 'None': 
+					file.write(str(align.STAR()+"\n"))
+
 			if inputs.aligner() == "tophat2": #logic for tophat alignment...
 				if settings.getEnv()["cluster"] is not 'None': #...on a cluster such as minerva
 					file = open(settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/mapping/"+line+".tophat2.mapping.pbs", "w") #change to relative path
