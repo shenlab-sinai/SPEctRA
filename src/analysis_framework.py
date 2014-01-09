@@ -119,6 +119,6 @@ class ScriptWriter(object):
 					file.write(str(align.tophat()+"\n"))
 					#insert post-processing
 					#insert QC 
-					#file.write("python quality_control.py " + outdir + " " + inputs.genome()) #uncomment this when you fix this class
+					file.write("python quality_control.py " + outdir + " " + inputs.genome()) #uncomment this when you fix this class
 		file.close()
 			#star logic

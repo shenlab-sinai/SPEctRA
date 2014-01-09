@@ -10,17 +10,8 @@ from analysis_framework import *
 
 shell_splitUnique = "|cut -f1|sort -u |wc -l" #shell command to count unique reads only
 
-######## temp variables #####################################
-exonicPath = "/home/immanuel/Desktop/mm9_bed/exon.bed"
-intronicPath = "/home/immanuel/Desktop/mm9_bed/intron.bed"
-intragenicPath = "/home/immanuel/Desktop/mm9_bed/intragenic.bed"  ###include all this in yaml file
-intergenicPath = "/home/immanuel/Desktop/mm9_bed/intragenic.bed"
-rRNApath = "/home/immanuel/Desktop/mm9_rRNA.bed"
-#############################################################
-
 
 settings = ImportSettings()
-
 
 
 #add fastqc class here
@@ -89,7 +80,7 @@ class QCReport(object):
 	#@dd decorator
 	def gatherReport(self): #computes rates 
 		print "Proceeding with QC step..."
-		mapping = self.rawReads.mitochondrial()  / totalReads
+		mapping = mitochondrial()  / totalReads
 		intragenic = self.rawReads.intragenic()/rawReads.mappedTotal()
 		exonic = self.rawReads.exon()/rawReads.mappedTotal()
 		intronic = self.rawReads.intron()/rawReads.mappedTotal()
@@ -100,13 +91,13 @@ class QCReport(object):
 		## change name to pass sample name to method
 		
 
-		sample = "Name" + "\t"+st(mapping)+"\t"+str(chrMTrate)+"\t"+str(rRNArate)
+		sample = "Name" + +"\t"+ totalReads+"\t"+st(self.rawReads.mappedTotal)+"\t"+str(self.rawReads.mitochondrial())+"\t"+str(self.rawReads.ribosomal())"\t"+st(mapping)+"\t"+str(chrMTrate)+"\t"+str(rRNArate)+"\n"
 		#sample = "Name" + "\t" + str(mapping) +"\t"+ str(intragenic)+ "\t" + str(exonic) + "\t" + str(intronic) + "\t"+ str(intragenic) + "\t" + str(rRNArate)+"\t"+str(chrMTrate) + "\n"
 		return sample
 	
 	def writeReport(self,fileName):
 		file = open(fileName+".qcMetrics.txt", "w") #change to relative path
-		file.write("sample"+"\t"+"mapping_rate"+"\t"+"Mitochondrial_RNA_rate"+"\t"+"rRNA_rate")
+		file.write("sample"+"\t"+"total_reads"+"\t"+"mapped_reads"+"\t"+"Mitochondrial_RNA_reads"+"\t"+"rRNA_reads"+"\t"+"mapping_rate"+"\t"+"Mitochondrial_RNA_rate"+"\t"+"rRNA_rate"+"\n")
 		file.write(self.gatherReport())
 		file.close()
 		
