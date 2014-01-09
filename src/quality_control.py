@@ -98,11 +98,15 @@ class QCReport(object):
 		rRNArate = self.rawReads.ribosomal()/rawReads.mappedTotal()
 		#concatenates rates in a tab-delimted string
 		## change name to pass sample name to method
-		sample = "Name" + "\t" + str(mapping) +"\t"+ str(intragenic)+ "\t" + str(exonic) + "\t" + str(intronic) + "\t"+ str(intragenic) + "\t" + str(rRNArate)+"\t"+str(chrMTrate) + "\n"
+		
+
+		sample = "Name" + "\t"+st(mapping)+"\t"+str(chrMTrate)+"\t"+str(rRNArate)
+		#sample = "Name" + "\t" + str(mapping) +"\t"+ str(intragenic)+ "\t" + str(exonic) + "\t" + str(intronic) + "\t"+ str(intragenic) + "\t" + str(rRNArate)+"\t"+str(chrMTrate) + "\n"
 		return sample
 	
 	def writeReport(self,fileName):
 		file = open(fileName+".qcMetrics.txt", "w") #change to relative path
+		file.write("sample"+"\t"+"mapping_rate"+"\t"+"Mitochondrial_RNA_rate"+"\t"+"rRNA_rate")
 		file.write(self.gatherReport())
 		file.close()
 		
