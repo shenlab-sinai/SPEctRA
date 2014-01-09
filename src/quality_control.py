@@ -56,16 +56,12 @@ class GetReads(object):
 		command = "samtools view "+self.dir+"/accepted_hits.bam -L "+ settings.genomes()[self.genome]["exonicPath"] + " " + shell_splitUnique
 		exon = subprocess.check_output(command, shell=True)
 		return exon
-
-	
 	def intron(self):
-		command = "samtools view "+self.dir+"/accepted_hits.bam -L "+ intronicPath + " " + shell_splitUnique
-		intron = subprocess.check_output(command, shell=True)
+		intron = self.intragenic() - self.exon
 		return intron
 	
 	def intergenic(self):
-		command = "samtools view "+self.dir+"/accepted_hits.bam -L "+ settings.genomes()[self.genome]["intergenicPath"] + " " + shell_splitUnique
-		intergenic = subprocess.check_output(command, shell=True)
+		intergenic = self.mappedTotal - self.intragenic()
 		return intergenic
 	
 	def mitochondrial(self):
@@ -105,12 +101,6 @@ class QCReport(object):
 		file = open(fileName+".qcMetrics.txt", "w") #change to relative path
 		file.write(self.gatherReport())
 		file.close()
-		
-# test = GetReads("/home/immanuel/Documents/Sample_project/mapping/CPU_C4_ACTTGA_L005_R1_001.tophat2")
-# print test.tophatTotal()
-
-# test2 = QCReport("/home/immanuel/Documents/Sample_project/mapping/CPU_C4_ACTTGA_L005_R1_001.tophat2")
-# print test2.gatherReport()
 
 
 runQC = QCReport(sys.argv[1],sys.argv[2])
