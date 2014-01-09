@@ -93,7 +93,7 @@ class ScriptWriter(object):
 		if inputs.aligner() == "STAR": #opens a single STAR mapping pbs file (himem queues only)
 			if settings.getEnv()["cluster"] is not 'None': 
 				file = open(settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/mapping/"+inputs.projName()+".STAR.mapping.pbs", "w")
-				file.write(settings.pbsHeader(inputs.projName()+".STAR",settings.homeDir(),inputs.projName(),str(inputs.proc()))+"\n")
+				file.write(settings.pbsHeader(inputs.projName()+".STAR",settings.homeDir(),inputs.projName(),str(inputs.proc()),queue="himem_24hr")+"\n")
 				
 		for line in self.util.subDirectories(inputs.fastQdir()):
 			
