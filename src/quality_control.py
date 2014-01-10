@@ -71,12 +71,12 @@ class QCReport(object):
 		
 		self.dir = dir
 		self.genome = genome
-		self.rawReads = GetReads(dir,ref.genome)
+		self.rawReads = GetReads(dir,str(self.genome))
 	
 	#@dd decorator
 	def gatherReport(self): #computes rates 
 		print "Proceeding with QC step..."
-		mapping = self.rawReads.mappedTotal() / totalReads
+		mapping = self.rawReads.mappedTotal() / self.rawReads.tophatTotal()
 		intragenic = self.rawReads.intragenic()/rawReads.mappedTotal()
 		exonic = self.rawReads.exon()/rawReads.mappedTotal()
 		intronic = self.rawReads.intron()/rawReads.mappedTotal()
@@ -87,7 +87,7 @@ class QCReport(object):
 		## change name to pass sample name to method
 		
 
-		sample = "Name" +"\t"+ totalReads+"\t"+str(self.rawReads.mappedTotal)+"\t"+str(self.rawReads.mitochondrial())+"\t"+str(self.rawReads.ribosomal())+"\t"+str(mapping)+"\t"+str(chrMTrate)+"\t"+str(rRNArate)+"\n"
+		sample = "Name" +"\t"+ self.rawReads.tophatTotal()+"\t"+str(self.rawReads.mappedTotal)+"\t"+str(self.rawReads.mitochondrial())+"\t"+str(self.rawReads.ribosomal())+"\t"+str(mapping)+"\t"+str(chrMTrate)+"\t"+str(rRNArate)+"\n"
 		#sample = "Name" + "\t" + str(mapping) +"\t"+ str(intragenic)+ "\t" + str(exonic) + "\t" + str(intronic) + "\t"+ str(intragenic) + "\t" + str(rRNArate)+"\t"+str(chrMTrate) + "\n"
 		return sample
 	
@@ -98,6 +98,8 @@ class QCReport(object):
 		file.close()
 
 
-runQC = QCReport(sys.argv[1],sys.argv[2])
-test2.gatherReport()
+# runQC = QCReport(sys.argv[1],sys.argv[2])
 
+
+runQC = QCReport("hey","mouse")
+runQC.writeReport(" ")
