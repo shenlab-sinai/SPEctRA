@@ -101,5 +101,5 @@ class QCReport(object):
 # runQC = QCReport(sys.argv[1],sys.argv[2])
 
 
-runQC = QCReport("hey","mouse")
-runQC.writeReport(" ")
+runQC = QCReport(sys.argv[1],sys.argv[2])
+runQC.writeReport("test")
