@@ -76,7 +76,7 @@ class QCReport(object):
 	#@dd decorator
 	def gatherReport(self): #computes rates 
 		print "Proceeding with QC step..."
-		mapping = self.rawReads.mappedTotal() / self.rawReads.tophatTotal()
+		mapping = self.rawReads.mappedTotal() / int(self.rawReads.tophatTotal())
 		intragenic = self.rawReads.intragenic()/rawReads.mappedTotal()
 		exonic = self.rawReads.exon()/rawReads.mappedTotal()
 		intronic = self.rawReads.intron()/rawReads.mappedTotal()
