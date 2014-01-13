@@ -31,11 +31,13 @@ class GetReads(object):
 		for line in counts:
 			if m.search(line):
 				totalReads = line.strip("reads_out=")
+
 		return totalReads
 					
 	def mappedTotal(self): #support all alignment outputs  in future
 		command = "samtools view "+self.dir+"/accepted_hits.bam " + shell_splitUnique
 		mappedReads = subprocess.check_output(command, shell=True)
+
 		return mappedReads
 	#individual mapping rates
 	def intragenic(self): 
@@ -57,12 +59,14 @@ class GetReads(object):
 	
 	def mitochondrial(self):
 		mitochondrial = pysam.Samfile(self.dir+"/accepted_hits.bam", "rb" ).count(region='MT')
+		
 		return mitochondrial
 	
 	def ribosomal(self):
 		
 		command = "samtools view "+self.dir+"/accepted_hits.bam -L " +settings.genomes()[self.genome]["rRNApath"]+ " " + shell_splitUnique
 		ribosomal = subprocess.check_output(command, shell=True)
+		
 		return ribosomal
 
 class QCReport(object):
@@ -76,18 +80,19 @@ class QCReport(object):
 	#@dd decorator
 	def gatherReport(self): #computes rates 
 		print "Proceeding with QC step..."
-		mapping = int(self.rawReads.mappedTotal()) / int(self.rawReads.tophatTotal())
+		mapping = float(self.rawReads.mappedTotal()) / float(self.rawReads.tophatTotal())
 		#intragenic = self.rawReads.intragenic()/rawReads.mappedTotal()
 		#exonic = self.rawReads.exon()/rawReads.mappedTotal()
 		#intronic = self.rawReads.intron()/rawReads.mappedTotal()
 		#intergenic = self.rawReads.intergenic()/rawReads.mappedTotal()
-		chrMTrate = int(self.rawReads.mitochondrial())/int(self.rawReads.mappedTotal())
-		rRNArate = int(self.rawReads.ribosomal())/int(self.rawReads.mappedTotal())
+		chrMTrate = float(self.rawReads.mitochondrial())/float(self.rawReads.mappedTotal())
+		rRNArate = float(self.rawReads.ribosomal())/float(self.rawReads.mappedTotal())
 		#concatenates rates in a tab-delimted string
 		## change name to pass sample name to method
 		
 
-		sample = "Name" +"\t"+ self.rawReads.tophatTotal()+"\t"+str(self.rawReads.mappedTotal)+"\t"+str(self.rawReads.mitochondrial())+"\t"+str(self.rawReads.ribosomal())+"\t"+str(mapping)+"\t"+str(chrMTrate)+"\t"+str(rRNArate)+"\n"
+		sample = "Name" +"\t"+ str(self.rawReads.tophatTotal())+"\t"+str(self.rawReads.mappedTotal())+"\t"+str(self.rawReads.mitochondrial())+"\t"+str(self.rawReads.ribosomal())+"\t"+str(mapping)+"\t"+str(chrMTrate)+"\t"+str(rRNArate)+"\n"
+		print sample
 		#sample = "Name" + "\t" + str(mapping) +"\t"+ str(intragenic)+ "\t" + str(exonic) + "\t" + str(intronic) + "\t"+ str(intragenic) + "\t" + str(rRNArate)+"\t"+str(chrMTrate) + "\n"
 		return sample
 	
