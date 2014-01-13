@@ -55,7 +55,9 @@ class UserInputsConfigFile(object): #parses user submitted YAML file ( single co
 	def fastQdir(self):
 		data = self.openConfig()['mapping']['fastQ_directory_path']
 		return data
-
+	def readCount(self):
+		countMethod = self.openConfig()['count']
+		return countMethod
 class GatherData(object):
 	#sort fastq samples to R1 and R2, even if multiple fastqs for one end are available
 	util = Utility()
@@ -123,4 +125,6 @@ class ScriptWriter(object):
 					file.write("python quality_control.py " + outdir + " " + inputs.genome()+ " " + basedir+"/QC/"+line) #uncomment this when you fix this class
 		file.close()
 			#star logic
+	def writeCounterScript(self):
+		pass
 
