@@ -98,7 +98,8 @@ class ScriptWriter(object):
 		for line in self.util.subDirectories(inputs.fastQdir()):
 			
 			sample = glob.glob(inputs.fastQdir()+"/"+line+"/*.fastq.gz")
-			outdir = settings.homeDir()+"/"+inputs.projName()+"/mapping/"+line+"."+ inputs.aligner()
+			basedir = settings.homeDir()+"/"+inputs.projName()
+			outdir = basedir+"/mapping/"+line+"."+ inputs.aligner()
 			align = Mapping(self.fastqs.read1(sample),inputs.proc(), outdir,settings.genomes()[inputs.genome()][inputs.aligner()],fastqR2=self.fastqs.read2(sample))
 			
 			if inputs.aligner() == "STAR": #opens a single STAR mapping pbs file (himem queues only)
@@ -119,6 +120,7 @@ class ScriptWriter(object):
 					file.write(str(align.tophat()+"\n"))
 					#insert post-processing
 					#insert QC 
-					file.write("python quality_control.py " + outdir + " " + inputs.genome()) #uncomment this when you fix this class
+					file.write("python quality_control.py " + outdir + " " + inputs.genome()+ " " + basedir+"/QC/"+line) #uncomment this when you fix this class
 		file.close()
 			#star logic
+

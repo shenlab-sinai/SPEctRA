@@ -92,7 +92,6 @@ class QCReport(object):
 		
 
 		sample = "Name" +"\t"+ str(self.rawReads.tophatTotal())+"\t"+str(self.rawReads.mappedTotal())+"\t"+str(self.rawReads.mitochondrial())+"\t"+str(self.rawReads.ribosomal())+"\t"+str(mapping)+"\t"+str(chrMTrate)+"\t"+str(rRNArate)+"\n"
-		print sample
 		#sample = "Name" + "\t" + str(mapping) +"\t"+ str(intragenic)+ "\t" + str(exonic) + "\t" + str(intronic) + "\t"+ str(intragenic) + "\t" + str(rRNArate)+"\t"+str(chrMTrate) + "\n"
 		return sample
 	
@@ -107,4 +106,4 @@ class QCReport(object):
 
 
 runQC = QCReport(sys.argv[1],sys.argv[2])
-runQC.writeReport("test")
+runQC.writeReport(sys.argv[3])
