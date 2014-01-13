@@ -89,7 +89,7 @@ class QCReport(object):
 		## change name to pass sample name to method
 		
 
-		sample = fileName +"\t"+ str(self.rawReads.tophatTotal()).strip("\n")+"\t"+str(self.rawReads.mappedTotal()).strip("\n")+"\t"+str(self.rawReads.mitochondrial()).strip("\n")+"\t"+str(self.rawReads.ribosomal())+"\t"+str(mapping)+"\t"+str(chrMTrate)+"\t"+str(rRNArate)+"\n"
+		sample = fileName +"\t"+ str(self.rawReads.tophatTotal()).strip("\n")+"\t"+str(self.rawReads.mappedTotal()).strip("\n")+"\t"+str(self.rawReads.mitochondrial()).strip("\n")+"\t"+str(self.rawReads.ribosomal()).strip("\n")+"\t"+str(mapping)+"\t"+str(chrMTrate)+"\t"+str(rRNArate)+"\n"
 		#sample = "Name" + "\t" + str(mapping) +"\t"+ str(intragenic)+ "\t" + str(exonic) + "\t" + str(intronic) + "\t"+ str(intragenic) + "\t" + str(rRNArate)+"\t"+str(chrMTrate) + "\n"
 		return sample
 	
