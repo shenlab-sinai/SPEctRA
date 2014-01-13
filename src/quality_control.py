@@ -61,7 +61,7 @@ class GetReads(object):
 	
 	def ribosomal(self):
 		
-		command = "samtools view "+self.dir+"/accepted_hits.bam - L " +settings.genomes()[self.genome]["rRNApath"]+ " " + shell_splitUnique
+		command = "samtools view "+self.dir+"/accepted_hits.bam -L " +settings.genomes()[self.genome]["rRNApath"]+ " " + shell_splitUnique
 		ribosomal = subprocess.check_output(command, shell=True)
 		return ribosomal
 
@@ -76,13 +76,13 @@ class QCReport(object):
 	#@dd decorator
 	def gatherReport(self): #computes rates 
 		print "Proceeding with QC step..."
-		mapping = self.rawReads.mappedTotal() / int(self.rawReads.tophatTotal())
-		intragenic = self.rawReads.intragenic()/rawReads.mappedTotal()
-		exonic = self.rawReads.exon()/rawReads.mappedTotal()
-		intronic = self.rawReads.intron()/rawReads.mappedTotal()
-		intergenic = self.rawReads.intergenic()/rawReads.mappedTotal()
-		chrMTrate = self.rawReads.mitochondrial()/rawReads.mappedTotal()
-		rRNArate = self.rawReads.ribosomal()/rawReads.mappedTotal()
+		mapping = int(self.rawReads.mappedTotal()) / int(self.rawReads.tophatTotal())
+		#intragenic = self.rawReads.intragenic()/rawReads.mappedTotal()
+		#exonic = self.rawReads.exon()/rawReads.mappedTotal()
+		#intronic = self.rawReads.intron()/rawReads.mappedTotal()
+		#intergenic = self.rawReads.intergenic()/rawReads.mappedTotal()
+		chrMTrate = int(self.rawReads.mitochondrial())/int(self.rawReads.mappedTotal())
+		rRNArate = int(self.rawReads.ribosomal())/int(self.rawReads.mappedTotal())
 		#concatenates rates in a tab-delimted string
 		## change name to pass sample name to method
 		
