@@ -116,6 +116,10 @@ class ScriptWriter(object):
 					#insert pbs headers
 					file.write(settings.pbsHeader(inputs.projName()+"."+line,settings.homeDir(),inputs.projName(),str(inputs.proc())))
 					#insert load modules
+
+					#hardcoded env modules
+					file.write("module load python/2.7.3"+"\n"+"module load pysam/0.6"+"\n"+"module load pyyaml/3.10"+"\n")
+
 					file.write("module load samtools"+"\n"+"module load " + settings.mappingPaths()['bowtie2'] +"\n"+"module load " + settings.mappingPaths()['tophat2'] +"\n")
 					#bowtie Index
 					file.write("export BOWTIE2_INDEXES="+settings.genomes()[inputs.genome()][inputs.aligner()]['index'] +"\n")
@@ -124,7 +128,7 @@ class ScriptWriter(object):
 					#insert QC 
 					file.write("python quality_control.py " + outdir + " " + inputs.genome()+ " " + basedir+"/QC/"+line) #uncomment this when you fix this class
 		file.close()
-			#star logic
+
 	def writeCounterScript(self):
 		pass
 
