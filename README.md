@@ -40,14 +40,32 @@ Ready to test on Minerva cluster to generate and launch PBS scripts for tophat m
              STAR:
                path: /scratch/purusi01/mm9_star
       
- - Please provide absolute paths to rRNA bed file, gtf and genome index files (for tophat) and STAR genome to `rRNApath`,`gtf`,`index`(under `tophat22` subheading) and `STAR``path` respectively
+ - Please provide absolute paths to rRNA bed file, gtf and genome index files (for tophat) and STAR genome to `rRNApath`,`gtf`,`index`(under `tophat2` subheading) and `STAR``path` respectively
  (note: Mapping rates to exonic, intronic, intragenic, and intergenic features are not yet supported) 
 
 ######Pipeline Execution [Please refer to Job execution YAML file](pipeline_start_template.yaml)
 - `project_Name` serves as an identification for the specific analysis (for example: RNAseq_mouse_case_vs_control) and will point to a created directory within the `project_directory` path set in the [configuration YAML file:](../src/config_template.yaml)
-- `mapping` 
+- `mapping` sets up the pipeline for genome alignment. Please provide the following data in the subheadings only:
+ - `fastQ_directory_path` is simply the directory where your fastq files are stored. Note: data provided by the sequencing core follows a strict protocol. It is as follows:  
+   - Project_Name > Sample_Name > Sample_Name_R1.fq, Sample_Name_R2.fq 
+ - `proc` is the number of processors required (integer_
+ - `aligner` refers to the desired short-read aligner to be used. Maps back to `tophat` and `STAR` in the [configuration YAML file:](../src/config_template.yaml)
+ - `genome` refers back to the organism name in the config file, and specifically to the built genome corresponding to the short-read aligner chosen.
+ - `strand`: (leave blank for now. Paired-end support is currently being tested. Leaving `strand` blank will default to "fr-unstranded" in tophat for single-end reads.
+- An example pipeline execution file is as follows:
 
-6. Usage:
+
+                project_Name: minerva_test
+                     mapping:
+                      fastQ_directory_path: /scratch/purusi01/test_fastq_pipeline/
+                      proc: 20
+                      aligner: tophat2
+                      genome: mouse
+                      strand:
+
+Once these paramenters are specified in detail, the pipeline is ready to run.
+
+###Usage:
        
   
 
