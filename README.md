@@ -15,7 +15,7 @@ Ready to test on Minerva cluster to generate and launch PBS scripts for tophat m
   4. edit config_template.yaml to set paths to your respective home and genome directories. Scratch space usage is recommended.
   5. Create input file to for mapping run using pipeline_start_template.yaml as a basis for required parameters.
      
-######Pipeline Setup: [Please refer to this example configuration YAML file:](../src/config_template.yaml)
+######Pipeline Setup: [Please refer to this example configuration YAML file:](/src/config_template.yaml)
           
 - The `Environment` header corresponds to the linux shell environment where you are submitting pipeline-generated jobs. This could either be a  `cluster` such as Minerva or a `server` like ngseq/gwas/medinfo
 - The `project_directory` header specifies the absolute path to a directory where you wish to save <i>all</i> your pipeline-run tasks. Each task will be separated in subdirectories outlined in the [Job execution file](pipeline_start_template.yaml)
@@ -44,12 +44,12 @@ Ready to test on Minerva cluster to generate and launch PBS scripts for tophat m
  (note: Mapping rates to exonic, intronic, intragenic, and intergenic features are not yet supported) 
 
 ######Pipeline Execution [Please refer to Job execution YAML file](pipeline_start_template.yaml)
-- `project_Name` serves as an identification for the specific analysis (for example: RNAseq_mouse_case_vs_control) and will point to a created directory within the `project_directory` path set in the [configuration YAML file:](../src/config_template.yaml)
+- `project_Name` serves as an identification for the specific analysis (for example: RNAseq_mouse_case_vs_control) and will point to a created directory within the `project_directory` path set in the [configuration YAML file:](/src/config_template.yaml)
 - `mapping` sets up the pipeline for genome alignment. Please provide the following data in the subheadings only:
  - `fastQ_directory_path` is simply the directory where your fastq files are stored. Note: data provided by the sequencing core follows a strict protocol. It is as follows:  
    - Project_Name > Sample_Name > Sample_Name_R1.fq, Sample_Name_R2.fq 
  - `proc` is the number of processors required (integer_
- - `aligner` refers to the desired short-read aligner to be used. Maps back to `tophat` and `STAR` in the [configuration YAML file:](../src/config_template.yaml)
+ - `aligner` refers to the desired short-read aligner to be used. Maps back to `tophat` and `STAR` in the [configuration YAML file:](/src/config_template.yaml)
  - `genome` refers back to the organism name in the config file, and specifically to the built genome corresponding to the short-read aligner chosen.
  - `strand`: (leave blank for now. Paired-end support is currently being tested. Leaving `strand` blank will default to "fr-unstranded" in tophat for single-end reads.
 - An example pipeline execution file is as follows:
