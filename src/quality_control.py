@@ -57,6 +57,7 @@ class GetReads(object):
 		return intergenic
 	
 	def mitochondrial(self):
+		os.system("samtools index "+self.dir+"/accepted_hits.bam")
 		mitochondrial = pysam.Samfile(self.dir+"/accepted_hits.bam", "rb" ).count(region='MT')
 		return mitochondrial
 	
