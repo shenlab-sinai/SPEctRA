@@ -15,17 +15,20 @@ Ready to test on Minerva cluster to generate and launch PBS scripts for tophat m
   4. edit config_template.yaml to set paths to your respective home and genome directories. Scratch space usage is recommended.
   5. Create input file to for mapping run using pipeline_start_template.yaml as a basis for required parameters.
      
-######[Please refer to this example configuration YAML file:](../src/config_template.yaml)
+######Pipeline Setup: [Please refer to this example configuration YAML file:](../src/config_template.yaml)
           
 - The `Environment` header corresponds to the linux shell environment where you are submitting pipeline-generated jobs. This could either be a  `cluster` such as Minerva or a `server` like ngseq/gwas/medinfo
 - The `project_directory` header specifies the absolute path to a directory where you wish to save <i>all</i> your pipeline-run tasks. Each task will be separated in subdirectories outlined in the [Job execution file](pipeline_start_template.yaml)
            
-Short-read_aligners:
-            tophat2: tophat/2.0.9
-            bowtie2: bowtie2/2.1.0
-            STAR: rna-star/2.3.0e
-           genomes:
-            mouse:
+- The following `Short-read_aligners` are supported: `tophat` and `STAR`. Each of the corresponding subheadings must be specified with the respective module name or path. Example: 
+ - `tophat2: tophat/2.0.9`
+ - `bowtie2: bowtie2/2.1.0` Bowtie module <i>must</i> be specified with Tophat
+ - `STAR: rna-star/2.3.0e`
+ - the `genomes` header outlines paths for genomic reference and annotation files for mapping and QC. As long as the following subheader hiercarchy is adhered, the pipeline can support any built genome for tophat and STAR short-read aligners. The key subheading is the organism name. For example, for a `mouse` genome, the following YAML structure is as follows:
+   
+
+
+           mouse:
              rRNApath: /scratch/purusi01/Mus_musculus/Ensembl/NCBIM37/Annotation/Genes/rRNA.bed
              tophat2:
               gtf: /scratch/purusi01/Mus_musculus/Ensembl/NCBIM37/Annotation/Genes/genes.gtf
@@ -36,10 +39,16 @@ Short-read_aligners:
              intergenicPath:
              STAR:
                path: /scratch/purusi01/mm9_star
-     
+      
+ - Please provide absolute paths to rRNA bed file, gtf and genome index files (for tophat) and STAR genome to `rRNApath`,`gtf`,`index`(under `tophat22` subheading) and `STAR``path` respectively
+ (note: Mapping rates to exonic, intronic, intragenic, and intergenic features are not yet supported) 
 
-  6. Usage:
+######Pipeline Execution [Please refer to Job execution YAML file](pipeline_start_template.yaml)
+- `project_Name` serves as an identification for the specific analysis (for example: RNAseq_mouse_case_vs_control) and will point to a created directory within the `project_directory` path set in the [configuration YAML file:](../src/config_template.yaml)
+- `mapping` 
+
+6. Usage:
        
-
+  
 
          python ./src/complete_seq.py -p {config file}.yaml
