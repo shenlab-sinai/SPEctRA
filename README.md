@@ -48,7 +48,7 @@ Ready to test on Minerva cluster to generate and launch PBS scripts for tophat m
 - `mapping` sets up the pipeline for genome alignment. Please provide the following data in the subheadings only:
  - `fastQ_directory_path` is simply the directory where your fastq files are stored. Note: data provided by the sequencing core follows a strict protocol. It is as follows:  
    - Project_Name > Sample_Name > Sample_Name_R1.fq, Sample_Name_R2.fq 
- - `proc` is the number of processors required (integer_
+ - `proc` is the number of processors required (integer)
  - `aligner` refers to the desired short-read aligner to be used. Maps back to `tophat` and `STAR` in the [configuration YAML file:](/src/config_template.yaml)
  - `genome` refers back to the organism name in the config file, and specifically to the built genome corresponding to the short-read aligner chosen.
  - `strand`: (leave blank for now. Paired-end support is currently being tested. Leaving `strand` blank will default to "fr-unstranded" in tophat for single-end reads.
