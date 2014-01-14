@@ -126,7 +126,7 @@ class ScriptWriter(object):
 					file.write(str(align.tophat()+"\n"))
 					#insert post-processing
 					#insert QC 
-					file.write("python quality_control.py " + outdir + " " + inputs.genome()+ " " + basedir+"/QC/"+line) #uncomment this when you fix this class
+					file.write("python "+os.path.dirname(os.path.realpath(__file__))+"/quality_control.py " + outdir + " " + inputs.genome()+ " " + basedir+"/QC/"+line) #uncomment this when you fix this class
 		file.close()
 
 	def writeCounterScript(self):
