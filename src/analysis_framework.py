@@ -103,11 +103,12 @@ class ScriptWriter(object):
 			basedir = settings.homeDir()+"/"+inputs.projName()
 			outdir = basedir+"/mapping/"+line+"."+ inputs.aligner()
 
-			if inputs.strand() == 'None':
+			
 
-				align = Mapping(self.fastqs.read1(sample),inputs.proc(), outdir,settings.genomes()[inputs.genome()][inputs.aligner()],fastqR2=self.fastqs.read2(sample))
+			align = Mapping(self.fastqs.read1(sample),inputs.proc(), outdir,settings.genomes()[inputs.genome()][inputs.aligner()],fastqR2=self.fastqs.read2(sample))
+			
 			if inputs.strand() == "fr-secondstrand":
-				align = Mapping(self.fastqs.read1(sample),inputs.proc(), outdir,settings.genomes()[inputs.genome()][inputs.aligner()],libType="fr-secondstrand"fastqR2=self.fastqs.read2(sample))
+				align = Mapping(self.fastqs.read1(sample),inputs.proc(), outdir,settings.genomes()[inputs.genome()][inputs.aligner()],libType="fr-secondstrand",fastqR2=self.fastqs.read2(sample)) 
 			
 			if inputs.aligner() == "STAR": #opens a single STAR mapping pbs file (himem queues only)
 				if settings.getEnv()["cluster"] is not 'None':
