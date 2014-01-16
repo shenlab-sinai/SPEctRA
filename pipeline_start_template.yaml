@@ -1,7 +1,7 @@
 project_Name: 
 mapping:
- fastQ_directory_path: 
- proc: 
- aligner: 
- genome: 
- strand: 
+    fastQ_directory_path: 
+    proc: 
+    aligner: 
+    genome: 
+    strand: 
