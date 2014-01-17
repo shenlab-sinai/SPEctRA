@@ -23,21 +23,22 @@ class GetReads(object):
 		self.genome = genome
 		
 	#figure out how to execute this class properly
-	def tophatTotal(self): #This needs to be refactored. Temporary solution!
+
 		
-		getReadsIn = Utility() 
-		counts = getReadsIn.openFile(self.dir,"prep_reads.info")
-		m = re.compile("reads_out")
-		for line in counts:
-			if m.search(line):
-				totalReads = line.strip("reads_out=")
-		return totalReads
-					
+	def unmapped(self):
+		command = "samtools view "+self.dir+"/unmapped.bam " + shell_splitUnique
+		unmapped = subprocess.check_output(command, shell=True)
+		return unmapped
+
 	def mappedTotal(self): #support all alignment outputs  in future
-		command = "samtools view "+self.dir+"/accepted_hits.bam " + shell_splitUnique
+		command = "samtools view -F 12"+self.dir+"/accepted_hits.bam " + shell_splitUnique
 		mappedReads = subprocess.check_output(command, shell=True)
 
 		return mappedReads
+
+	def tophatTotal(self):
+		totalReads = int(self.unmapped()) + int(self.mappedTotal())
+		return totalReads
 	#individual mapping rates
 	def intragenic(self): 
 		command = "samtools view "+self.dir+"/accepted_hits.bam -L "+ intragenicPath + " " + shell_splitUnique
@@ -57,13 +58,14 @@ class GetReads(object):
 		return intergenic
 	
 	def mitochondrial(self):
-		os.system("samtools index "+self.dir+"/accepted_hits.bam")
-		mitochondrial = pysam.Samfile(self.dir+"/accepted_hits.bam", "rb" ).count(region='MT')
+		# os.system("samtools index "+self.dir+"/accepted_hits.bam")
+		# mitochondrial = pysam.Samfile(self.dir+"/accepted_hits.bam", "rb" ).count(region='MT')
+		command = "samtools view -F 12 "+self.dir+"/accepted_hits.bam| grep MT "+shell_splitUnique
 		return mitochondrial
 	
 	def ribosomal(self):
 		
-		command = "samtools view "+self.dir+"/accepted_hits.bam -L " +settings.genomes()[self.genome]["rRNApath"]+ " " + shell_splitUnique
+		command = "samtools view -F 12"+self.dir+"/accepted_hits.bam -L " +settings.genomes()[self.genome]["rRNApath"]+ " " + shell_splitUnique
 		ribosomal = subprocess.check_output(command, shell=True)
 		
 		return ribosomal
