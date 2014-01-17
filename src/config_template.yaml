@@ -1,20 +1,31 @@
 Environment:
- cluster: Minerva
- server: 
-project_directory: /scratch/purusi01/RNAseq_projects/
+    cluster: Minerva
+    server: 
+project_directory: /scratch/purusi01/RNAseq_projects
 Short-read_aligners:
- tophat2: tophat/2.0.9
- bowtie2: bowtie2/2.1.0
- STAR: rna-star/2.3.0e
+    tophat2: tophat/2.0.9
+    bowtie2: bowtie2/2.1.0
+    STAR: rna-star/2.3.0e
 genomes: 
- mouse: 
-  rRNApath: /scratch/purusi01/Mus_musculus/Ensembl/NCBIM37/Annotation/Genes/rRNA.bed
-  tophat2:  
-   gtf: /scratch/purusi01/Mus_musculus/Ensembl/NCBIM37/Annotation/Genes/genes.gtf
-   index: /scratch/purusi01/Mus_musculus/Ensembl/NCBIM37/Sequence/Bowtie2Index/genome
-  exonicPath: 
-  intronicPath:
-  intragenicPath:
-  intergenicPath:
-  STAR:
-    path: /scratch/purusi01/mm9_star
+    mouse: 
+        rRNApath: /scratch/purusi01/Mus_musculus/Ensembl/NCBIM37/Annotation/Genes/rRNA.bed
+        tophat2:  
+            gtf: /scratch/purusi01/Mus_musculus/Ensembl/NCBIM37/Annotation/Genes/genes.gtf
+            index: /scratch/purusi01/Mus_musculus/Ensembl/NCBIM37/Sequence/Bowtie2Index/genome
+        exonicPath: 
+        intronicPath:
+        intragenicPath:
+        intergenicPath:
+        STAR:
+            path: 
+    hg19_ERCC: 
+        rRNApath: /scratch/purusi01/hg19_ERCC/Homo_sapiens/UCSC/hg19/Annotation/Genes/hg19_rRNA.bed
+        tophat2:  
+            gtf: /scratch/purusi01/hg19_ERCC/Homo_sapiens/UCSC/hg19/Annotation/Genes/genes_ERCC.gtf
+            index: /scratch/purusi01/hg19_ERCC/Homo_sapiens/UCSC/hg19/Sequence/Bowtie2Index/genome
+        exonicPath: 
+        intronicPath:
+        intragenicPath:
+        intergenicPath:
+        STAR:
+            path: 
