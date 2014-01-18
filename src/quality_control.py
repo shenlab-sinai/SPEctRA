@@ -31,7 +31,7 @@ class GetReads(object):
 		return unmapped
 
 	def mappedTotal(self): #support all alignment outputs  in future
-		command = "samtools view -F 12"+self.dir+"/accepted_hits.bam " + shell_splitUnique
+		command = "samtools view -F 12 "+self.dir+"/accepted_hits.bam " + shell_splitUnique
 		mappedReads = subprocess.check_output(command, shell=True)
 
 		return mappedReads
@@ -60,12 +60,13 @@ class GetReads(object):
 	def mitochondrial(self):
 		# os.system("samtools index "+self.dir+"/accepted_hits.bam")
 		# mitochondrial = pysam.Samfile(self.dir+"/accepted_hits.bam", "rb" ).count(region='MT')
-		command = "samtools view -F 12 "+self.dir+"/accepted_hits.bam| grep MT "+shell_splitUnique
+		command = "samtools view -F 12 "+self.dir+"/accepted_hits.bam | grep MT "+shell_splitUnique
+		mitochondrial = subprocess.check_output(command, shell=True)
 		return mitochondrial
 	
 	def ribosomal(self):
 		
-		command = "samtools view -F 12"+self.dir+"/accepted_hits.bam -L " +settings.genomes()[self.genome]["rRNApath"]+ " " + shell_splitUnique
+		command = "samtools view -F 12 "+self.dir+"/accepted_hits.bam -L " +settings.genomes()[self.genome]["rRNApath"]+ " " + shell_splitUnique
 		ribosomal = subprocess.check_output(command, shell=True)
 		
 		return ribosomal
