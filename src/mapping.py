@@ -42,13 +42,12 @@ class Auxilery(object): #post alignment manipulation
  		#indexBam
 
 class Counting(object):
-	def __init__(self,bamPath,gtfPath,outFile):
-		self.bamPath = bamPath
+	def __init__(self,gtfPath,outFile):
 		self.gtfPath = gtfPath
 		self.outFile = outFile
 		pass
 
-	def htseqcounts(self,stranded="no"):
+	def htseqcounts(self,bamPath,stranded="no"):
 		command = "samtools sort -no %s temp | samtools view -h -o - - |htseq-count -s %s - %s > %s" % (self.bamPath,stranded,self.gtfPath,self.outFile)
 		return command
 	def cuffDiffcounts(self,fastaPath,stranded ="unstranded"):

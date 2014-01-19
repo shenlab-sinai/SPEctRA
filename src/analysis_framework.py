@@ -106,9 +106,11 @@ class ScriptWriter(object):
 			
 
 			align = Mapping(self.fastqs.read1(sample),inputs.proc(), outdir,settings.genomes()[inputs.genome()][inputs.aligner()],fastqR2=self.fastqs.read2(sample))
+			count = Counting(settings.genomes()[inputs.genome()]['tophat2']['gtf'],basedir+"/counts/"+line+"."+"htseq_counts")
 			
 			if inputs.strand() == "fr-secondstrand":
 				align = Mapping(self.fastqs.read1(sample),inputs.proc(), outdir,settings.genomes()[inputs.genome()][inputs.aligner()],libType="fr-secondstrand",fastqR2=self.fastqs.read2(sample)) 
+				strand = "yes"
 			
 			if inputs.aligner() == "STAR": #opens a single STAR mapping pbs file (himem queues only)
 				if settings.getEnv()["cluster"] is not 'None':
@@ -132,7 +134,9 @@ class ScriptWriter(object):
 					file.write(str(align.tophat()+"\n"))
 					#insert post-processing
 					#insert QC 
-					file.write("python "+os.path.dirname(os.path.realpath(__file__))+"/quality_control.py " + outdir + " " + inputs.genome()+ " " + basedir+"/QC/"+line) #uncomment this when you fix this class
+					file.write("python "+os.path.dirname(os.path.realpath(__file__))+"/quality_control.py " + outdir + " " + inputs.genome()+ " " + basedir+"/QC/"+line) 
+					file.write(str(count.htseqcounts(outdir+"/accepted_hits.bam", strand)))
+
 		file.close()
 
 	def writeCounterScript(self):
