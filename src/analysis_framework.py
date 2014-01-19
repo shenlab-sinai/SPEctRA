@@ -136,6 +136,7 @@ class ScriptWriter(object):
 					#insert post-processing
 					#insert QC 
 					file.write("python "+os.path.dirname(os.path.realpath(__file__))+"/quality_control.py " + outdir + " " + inputs.genome()+ " " + basedir+"/QC/"+line+"\n") 
+					file.write("cd "+outdir+"\n")
 					file.write(str(count.htseqcounts(outdir+"/accepted_hits.bam", countStrand))+"\n")
 
 		file.close()
