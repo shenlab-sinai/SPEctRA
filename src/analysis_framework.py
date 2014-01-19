@@ -126,7 +126,7 @@ class ScriptWriter(object):
 					#insert load modules
 
 					#hardcoded env modules
-					file.write("module load python/2.7.3"+"\n"+"module load pysam/0.6"+"\n"+"module load pyyaml/3.10"+"\n")
+					file.write("module load python/2.7.3"+"\n"+"module load pysam/0.6"+"\n"+"module load pyyaml/3.10"+"\n"+"module load htseq"+"\n")
 
 					file.write("module load samtools"+"\n"+"module load " + settings.mappingPaths()['bowtie2'] +"\n"+"module load " + settings.mappingPaths()['tophat2'] +"\n")
 					#bowtie Index
