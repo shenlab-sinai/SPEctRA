@@ -25,6 +25,7 @@ class SetProjectEnv(object): #creates project folders (relative paths) before pr
 	def startMappingEnv(self): #add logic to match user input of desired tasks 
 		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"mapping")
 		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"QC")
+		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"counts")
 		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"scripts/mapping")
 		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"logs/mapping")
 		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"scripts/other")#for now
@@ -106,11 +107,11 @@ class ScriptWriter(object):
 			
 
 			align = Mapping(self.fastqs.read1(sample),inputs.proc(), outdir,settings.genomes()[inputs.genome()][inputs.aligner()],fastqR2=self.fastqs.read2(sample))
-			count = Counting(settings.genomes()[inputs.genome()]['tophat2']['gtf'],basedir+"/counts/"+line+"."+"htseq_counts")
-			
+			count = Counting(settings.genomes()[inputs.genome()]['tophat2']['gtf'],basedir+"/counts/"+line+"."+"htseq_counts"+".txt")
+			countStrand = "No"
 			if inputs.strand() == "fr-secondstrand":
 				align = Mapping(self.fastqs.read1(sample),inputs.proc(), outdir,settings.genomes()[inputs.genome()][inputs.aligner()],libType="fr-secondstrand",fastqR2=self.fastqs.read2(sample)) 
-				strand = "yes"
+				countStrand = "yes"
 			
 			if inputs.aligner() == "STAR": #opens a single STAR mapping pbs file (himem queues only)
 				if settings.getEnv()["cluster"] is not 'None':
@@ -134,8 +135,8 @@ class ScriptWriter(object):
 					file.write(str(align.tophat()+"\n"))
 					#insert post-processing
 					#insert QC 
-					file.write("python "+os.path.dirname(os.path.realpath(__file__))+"/quality_control.py " + outdir + " " + inputs.genome()+ " " + basedir+"/QC/"+line) 
-					file.write(str(count.htseqcounts(outdir+"/accepted_hits.bam", strand)))
+					file.write("python "+os.path.dirname(os.path.realpath(__file__))+"/quality_control.py " + outdir + " " + inputs.genome()+ " " + basedir+"/QC/"+line+"\n") 
+					file.write(str(count.htseqcounts(outdir+"/accepted_hits.bam", countStrand))+"\n")
 
 		file.close()
 
