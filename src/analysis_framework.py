@@ -108,7 +108,7 @@ class ScriptWriter(object):
 
 			align = Mapping(self.fastqs.read1(sample),inputs.proc(), outdir,settings.genomes()[inputs.genome()][inputs.aligner()],fastqR2=self.fastqs.read2(sample))
 			count = Counting(settings.genomes()[inputs.genome()]['tophat2']['gtf'],basedir+"/counts/"+line+"."+"htseq_counts"+".txt")
-			countStrand = "No"
+			countStrand = "no"
 			if inputs.strand() == "fr-secondstrand":
 				align = Mapping(self.fastqs.read1(sample),inputs.proc(), outdir,settings.genomes()[inputs.genome()][inputs.aligner()],libType="fr-secondstrand",fastqR2=self.fastqs.read2(sample)) 
 				countStrand = "yes"
@@ -136,8 +136,8 @@ class ScriptWriter(object):
 					#insert post-processing
 					#insert QC 
 					file.write("python "+os.path.dirname(os.path.realpath(__file__))+"/quality_control.py " + outdir + " " + inputs.genome()+ " " + basedir+"/QC/"+line+"\n") 
-					file.write("cd "+outdir+"\n")
-					file.write(str(count.htseqcounts(outdir+"/accepted_hits.bam", countStrand))+"\n")
+					#file.write("cd "+outdir+"\n")
+					#file.write(str(count.htseqcounts(outdir+"/accepted_hits.bam", countStrand))+"\n")
 
 		file.close()
 
