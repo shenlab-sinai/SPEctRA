@@ -71,15 +71,15 @@ class GatherData(object):
 			if regex.search(line) is not None:
 				read = re.findall(exp, line)
 				samples.update({line:read[0]})
-		#return dictionary of values		
+		#return dictionary of values
 		return samples		
 	#these functions parse R1 and R2 data and return a string 
 	def read1(self,fastq):
-		R1 = ",".join([str(x) for x in self.util.findKey(self.studySamples(fastq),'R1')])
+		R1 = ",".join(sorted([str(x) for x in self.util.findKey(self.studySamples(fastq),'R1')]))
 		return R1
 
 	def read2(self,fastq):
-		R2 = ",".join([str(x) for x in self.util.findKey(self.studySamples(fastq),'R2')])
+		R2 = ",".join(sorted([str(x) for x in self.util.findKey(self.studySamples(fastq),'R2')]))
 		return R2
 	#def pairwise(self) ...future parsing of pairwise combinations. Not this sprint
 
@@ -136,8 +136,8 @@ class ScriptWriter(object):
 					#insert post-processing
 					#insert QC 
 					file.write("python "+os.path.dirname(os.path.realpath(__file__))+"/quality_control.py " + outdir + " " + inputs.genome()+ " " + basedir+"/QC/"+line+"\n") 
-					#file.write("cd "+outdir+"\n")
-					#file.write(str(count.htseqcounts(outdir+"/accepted_hits.bam", countStrand))+"\n")
+					file.write("cd "+outdir+"\n")
+					file.write(str(count.htseqcounts(outdir+"/accepted_hits.bam", countStrand))+"\n")
 
 		file.close()
 
