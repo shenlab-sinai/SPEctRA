@@ -68,7 +68,7 @@ class GatherData(object):
 	util = Utility()
 	def mergeReplicates(self,sampledir, repDir=None,mergeFile=None,):
 		
-		sample1 = glob.glob(sampledir+"/*.fastq.gz")
+		sample = glob.glob(sampledir+"/*.fastq.gz")
 
 		if mergeFile is not None:
 
@@ -76,11 +76,10 @@ class GatherData(object):
 			replicates={}
 			for row in paths:
 				replicates[row[0]]=row[1:]
-			print replicates[os.path.basename(sampledir)]
-			sample2 = glob.glob(repDir+"/"+replicates[os.path.basename(sampledir)][0]+"/*.fastq.gz")
-			sample = sample1+sample2
-			print sample
-			print repDir+"/"+replicates[os.path.basename(sampledir)][0]+"/*.fastq.gz"
+			if replicates.get(os.path.basename(sampledir)) is not None:
+			 	sample2 = glob.glob(repDir+"/"+replicates[os.path.basename(sampledir)][0]+"/*.fastq.gz")
+			 	sample = sample+sample2
+
 		return sample
 
 
