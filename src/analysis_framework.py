@@ -4,6 +4,7 @@ import os
 import glob
 import sys
 import re
+import csv
 from utils import *
 from env_config import *
 from mapping import *
@@ -56,14 +57,35 @@ class UserInputsConfigFile(object): #parses user submitted YAML file ( single co
 	def fastQdir(self):
 		data = self.openConfig()['mapping']['fastQ_directory_path']
 		return data
+	def mergeDir(self):
+		data = self.openConfig()['mapping']['merge_directory_path']
+		return data
 	def readCount(self):
 		countMethod = self.openConfig()['count']
 		return countMethod
 class GatherData(object):
 	#sort fastq samples to R1 and R2, even if multiple fastqs for one end are available
 	util = Utility()
+	def mergeReplicates(self,sampledir, repDir=None,mergeFile=None,):
+		
+		sample1 = glob.glob(sampledir+"/*.fastq.gz")
+
+		if mergeFile is not None:
+
+			paths = csv.reader(open(mergeFile,'r'), delimiter='\t')
+			replicates={}
+			for row in paths:
+				replicates[row[0]]=row[1:]
+			print replicates[os.path.basename(sampledir)]
+			sample2 = glob.glob(repDir+"/"+replicates[os.path.basename(sampledir)][0]+"/*.fastq.gz")
+			sample = sample1+sample2
+			print sample
+			print repDir+"/"+replicates[os.path.basename(sampledir)][0]+"/*.fastq.gz"
+		return sample
+
+
 	def studySamples(self, fastq): #need to sort values 
-	
+
 		exp = "R[1|2]"
 		samples = { }
 		regex = re.compile(exp)
@@ -72,7 +94,7 @@ class GatherData(object):
 				read = re.findall(exp, line)
 				samples.update({line:read[0]})
 		#return dictionary of values
-		return samples		
+		return samples
 	#these functions parse R1 and R2 data and return a string 
 	def read1(self,fastq):
 		R1 = ",".join(sorted([str(x) for x in self.util.findKey(self.studySamples(fastq),'R1')]))
@@ -87,7 +109,7 @@ class ScriptWriter(object):
 	util = Utility()
 	fastqs = GatherData()
 	
-	def writeMappingScript(self,userInput): #writes mapping script
+	def writeMappingScript(self,userInput,mergeFile=None): #writes mapping script #flexible for csv 
 		
 		inputs = UserInputsConfigFile(userInput)
 		# star command in one script, himem
@@ -100,7 +122,8 @@ class ScriptWriter(object):
 				
 		for line in self.util.subDirectories(inputs.fastQdir()):
 			
-			sample = glob.glob(inputs.fastQdir()+"/"+line+"/*.fastq.gz")
+			#sample = glob.glob(inputs.fastQdir()+"/"+line+"/*.fastq.gz") #change to function call
+			sample = self.fastqs.mergeReplicates(inputs.fastQdir()+"/"+line,inputs.mergeDir(),mergeFile)
 			basedir = settings.homeDir()+"/"+inputs.projName()
 			outdir = basedir+"/mapping/"+line+"."+ inputs.aligner()
 
