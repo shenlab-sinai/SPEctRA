@@ -100,7 +100,7 @@ class QCReport(object):
 	def writeReport(self,fileName):
 		file = open(fileName+".qcMetrics.txt", "w") #change to relative path
 		file.write("sample"+"\t"+"total_reads"+"\t"+"mapped_reads"+"\t"+"Mitochondrial_RNA_reads"+"\t"+"rRNA_reads"+"\t"+"mapping_rate"+"\t"+"Mitochondrial_RNA_rate"+"\t"+"rRNA_rate"+"\n")
-		file.write(self.gatherReport(fileName.strip(settings.homeDir())))
+		file.write(self.gatherReport(os.path.basename(fileName)))
 		file.close()
 
 
