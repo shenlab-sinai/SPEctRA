@@ -113,14 +113,17 @@ class ScriptWriter(object):
 	
 	def writeMappingScript(self,userInput,mergeFile=None): #writes mapping script #flexible for csv 
 		
-		inputs = UserInputsConfigFile(userInput)
+		inputs = UserInputsConfigmapScript(userInput)
 		# star command in one script, himem
 		#mkdir and change script location to more generalized directory name
 		
-		if inputs.aligner() == "STAR": #opens a single STAR mapping pbs file (himem queues only)
-			if settings.getEnv()["cluster"] is not 'None': 
-				file = open(settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/mapping/"+inputs.projName()+".STAR.mapping.pbs", "w")
-				file.write(settings.pbsHeader(inputs.projName()+".STAR",settings.homeDir(),inputs.projName(),str(inputs.proc()),queue="himem_24hr")+"\n")
+		
+
+		########################### resolve STAR later ##################################################
+		# if inputs.aligner() == "STAR": #opens a single STAR mapping pbs mapScript (himem queues only)
+		# 	if settings.getEnv()["cluster"] is not 'None': 
+		# 		mapScript = open(settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/mapping/"+inputs.projName()+".STAR.mapping.pbs", "w")
+		# 		mapScript.write(settings.pbsHeader(inputs.projName()+".STAR",settings.homeDir(),inputs.projName(),str(inputs.proc()),queue="himem_24hr")+"\n")
 				
 		for line in self.util.subDirectories(inputs.fastQdir()):
 			
@@ -134,37 +137,70 @@ class ScriptWriter(object):
 			align = Mapping(self.fastqs.read1(sample),inputs.proc(), outdir,settings.genomes()[inputs.genome()][inputs.aligner()],fastqR2=self.fastqs.read2(sample))
 			count = Counting(settings.genomes()[inputs.genome()]['tophat2']['gtf'],basedir+"/counts/"+line+"."+"htseq_counts"+".txt")
 			countStrand = "no"
+			
+
 			if inputs.strand() == "fr-secondstrand":
 				align = Mapping(self.fastqs.read1(sample),inputs.proc(), outdir,settings.genomes()[inputs.genome()][inputs.aligner()],libType="fr-secondstrand",fastqR2=self.fastqs.read2(sample)) 
 				countStrand = "yes"
 			
-			if inputs.aligner() == "STAR": #opens a single STAR mapping pbs file (himem queues only)
-				if settings.getEnv()["cluster"] is not 'None':
-					file.write("mkdir "+outdir+"\n") 
-					file.write("cd "+outdir+"\n")
-					file.write(str(align.STAR()+"\n"))
+			########################### resolve STAR later ##################################################
+			# if inputs.aligner() == "STAR": #opens a single STAR mapping pbs mapScript (himem queues only)
+			# 	if settings.getEnv()["cluster"] is not 'None':
+			# 		mapScript.write("mkdir "+outdir+"\n") 
+			# 		mapScript.write("cd "+outdir+"\n")
+			# 		mapScript.write(str(align.STAR()+"\n"))
+
+
+			###open qc and counting scripts
+			qcScriptPath=settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/QC/"+line+".QC.pbs"
+			qcScript = open(qcScript, "w")
+
+			countScriptPath = settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/counts/"+line+".counts.pbs" 
+			countScript = open(countScriptPath, "w")
+
+
 
 			if inputs.aligner() == "tophat2": #logic for tophat alignment...
 				if settings.getEnv()["cluster"] is not 'None': #...on a cluster such as minerva
-					file = open(settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/mapping/"+line+".tophat2.mapping.pbs", "w") #change to relative path
+					mapScript = open(settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/mapping/"+line+".tophat2.mapping.pbs", "w") #change to relative path
 					#insert pbs headers
-					file.write(settings.pbsHeader(inputs.projName()+"."+line,settings.homeDir(),inputs.projName(),str(inputs.proc())))
+					mapScript.write(settings.pbsHeader(inputs.projName()+"."+line,settings.homeDir(),inputs.projName(),str(inputs.proc()),"mapping"))
 					#insert load modules
 
 					#hardcoded env modules
-					file.write("module load python/2.7.6"+"\n"+"module load py_packages/2.7"+"\n"+"module load htseq"+"\n")
+					mapScript.write("module load python/2.7.6"+"\n"+"module load py_packages/2.7"+"\n")
 
-					file.write("module load samtools"+"\n"+"module load " + settings.mappingPaths()['bowtie2'] +"\n"+"module load " + settings.mappingPaths()['tophat2'] +"\n")
+					mapScript.write("module load samtools"+"\n"+"module load " + settings.mappingPaths()['bowtie2'] +"\n"+"module load " + settings.mappingPaths()['tophat2'] +"\n")
 					#bowtie Index
-					file.write("export BOWTIE2_INDEXES="+settings.genomes()[inputs.genome()][inputs.aligner()]['index'] +"\n")
-					file.write(str(align.tophat()+"\n"))
+					mapScript.write("export BOWTIE2_INDEXES="+settings.genomes()[inputs.genome()][inputs.aligner()]['index'] +"\n")
+					mapScript.write(str(align.tophat()+"\n"))
 					#insert post-processing
-					#insert QC 
-					file.write("python "+os.path.dirname(os.path.realpath(__file__))+"/quality_control.py " + outdir + " " + inputs.genome()+ " " + basedir+"/QC/"+line+"\n") 
-					file.write("cd "+outdir+"\n")
-					file.write(str(count.htseqcounts(outdir+"/accepted_hits.bam", countStrand))+"\n")
+					#insert QC
 
-		file.close()
+					#launch qc qsub here
+					qcScript.write(settings.pbsHeader(inputs.projName()+"."+line,settings.homeDir(),inputs.projName(),"1","QC",time="10:00:00",))
+					qcScript.write("module load python/2.7.6"+"\n"+"module load py_packages/2.7"+"\n"+"module load samtools"+"\n")
+					qcScript.write("python "+os.path.dirname(os.path.realpath(__mapScript__))+"/quality_control.py " + outdir + " " + inputs.genome()+ " " + basedir+"/QC/"+line+"\n")
+					qcScript.close()
+					mapScript.write("qsub " + qcScriptPath +"\n")
+
+
+					countScript.write((settings.pbsHeader(inputs.projName()+"."+line,settings.homeDir(),inputs.projName(),"1","counts",time="10:00:00",))
+					countScript.write("module load python/2.7.6"+"\n"+"module load py_packages/2.7"+"\n"+"module load samtools"+"\n")
+					countScript.write("cd "+outdir+"\n")
+					countScript.write(str(count.htseqcounts(outdir+"/accepted_hits.bam", countStrand))+"\n")
+					countScript.close()
+
+					mapScript.write("qsub " + countScriptPath +"\n")
+
+					#mapScript.write("python "+os.path.dirname(os.path.realpath(__mapScript__))+"/quality_control.py " + outdir + " " + inputs.genome()+ " " + basedir+"/QC/"+line+"\n") 
+					
+
+					#launch mapping qsub here
+					#mapScript.write("cd "+outdir+"\n")
+					#mapScript.write(str(count.htseqcounts(outdir+"/accepted_hits.bam", countStrand))+"\n")
+
+		mapScript.close()
 
 	def writeCounterScript(self):
 		pass
