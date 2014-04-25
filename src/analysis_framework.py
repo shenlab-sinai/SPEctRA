@@ -28,8 +28,11 @@ class SetProjectEnv(object): #creates project folders (relative paths) before pr
 		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"QC")
 		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"counts")
 		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"scripts/mapping")
+		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"scripts/QC")
+		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"scripts/counting")#for now
 		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"logs/mapping")
-		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"scripts/other")#for now
+		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"logs/QC")
+		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"logs/counting")
 	#os.system("mkdir "+self.projDir+"/"+"differential_analysis") Add new method to do this later
 
 class UserInputsConfigFile(object): #parses user submitted YAML file ( single command line options should be placed elswhere)
