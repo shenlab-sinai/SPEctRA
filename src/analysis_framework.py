@@ -77,7 +77,7 @@ class GatherData(object):
 			for row in paths:
 				replicates[row[0]]=row[1:]
 			if replicates.get(os.path.basename(sampledir)) is not None:
-			 	sample2 = glob.glob(repDir+"/"+replicates[os.path.basename(sampledir)][0]+"/*.fastq.gz")
+			 	sample2 = glob.glob(replicates[os.path.basename(sampledir)][0]+"/*.fastq.gz")
 			 	sample = sample+sample2
 
 		return sample
@@ -149,7 +149,7 @@ class ScriptWriter(object):
 					#insert load modules
 
 					#hardcoded env modules
-					file.write("module load python/2.7.3"+"\n"+"module load pysam/0.6"+"\n"+"module load pyyaml/3.10"+"\n"+"module load htseq"+"\n")
+					file.write("module load python/2.7.6"+"\n"+"module load py_packages/2.7"+"\n"+"module load htseq"+"\n")
 
 					file.write("module load samtools"+"\n"+"module load " + settings.mappingPaths()['bowtie2'] +"\n"+"module load " + settings.mappingPaths()['tophat2'] +"\n")
 					#bowtie Index
