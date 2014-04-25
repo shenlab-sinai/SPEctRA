@@ -29,10 +29,10 @@ class SetProjectEnv(object): #creates project folders (relative paths) before pr
 		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"counts")
 		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"scripts/mapping")
 		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"scripts/QC")
-		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"scripts/counting")#for now
+		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"scripts/counts")#for now
 		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"logs/mapping")
 		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"logs/QC")
-		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"logs/counting")
+		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"logs/counts")
 	#os.system("mkdir "+self.projDir+"/"+"differential_analysis") Add new method to do this later
 
 class UserInputsConfigFile(object): #parses user submitted YAML file ( single command line options should be placed elswhere)
@@ -113,7 +113,7 @@ class ScriptWriter(object):
 	
 	def writeMappingScript(self,userInput,mergeFile=None): #writes mapping script #flexible for csv 
 		
-		inputs = UserInputsConfigmapScript(userInput)
+		inputs = UserInputsConfigFile(userInput)
 		# star command in one script, himem
 		#mkdir and change script location to more generalized directory name
 		
@@ -152,8 +152,8 @@ class ScriptWriter(object):
 
 
 			###open qc and counting scripts
-			qcScriptPath=settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/QC/"+line+".QC.pbs"
-			qcScript = open(qcScript, "w")
+			qcScriptPath = settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/QC/"+line+".QC.pbs"
+			qcScript = open(qcScriptPath, "w")
 
 			countScriptPath = settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/counts/"+line+".counts.pbs" 
 			countScript = open(countScriptPath, "w")
@@ -180,17 +180,16 @@ class ScriptWriter(object):
 					#launch qc qsub here
 					qcScript.write(settings.pbsHeader(inputs.projName()+"."+line,settings.homeDir(),inputs.projName(),"1","QC",time="10:00:00",))
 					qcScript.write("module load python/2.7.6"+"\n"+"module load py_packages/2.7"+"\n"+"module load samtools"+"\n")
-					qcScript.write("python "+os.path.dirname(os.path.realpath(__mapScript__))+"/quality_control.py " + outdir + " " + inputs.genome()+ " " + basedir+"/QC/"+line+"\n")
-					qcScript.close()
+					qcScript.write("python "+os.path.dirname(os.path.realpath(__file__))+"/quality_control.py " + outdir + " " + inputs.genome()+ " " + basedir+"/QC/"+line+"\n")
+
 					mapScript.write("qsub " + qcScriptPath +"\n")
 
 
-					countScript.write((settings.pbsHeader(inputs.projName()+"."+line,settings.homeDir(),inputs.projName(),"1","counts",time="10:00:00",))
+					countScript.write(settings.pbsHeader(inputs.projName()+"."+line,settings.homeDir(),inputs.projName(),"1","counts",time="10:00:00",))
 					countScript.write("module load python/2.7.6"+"\n"+"module load py_packages/2.7"+"\n"+"module load samtools"+"\n")
 					countScript.write("cd "+outdir+"\n")
 					countScript.write(str(count.htseqcounts(outdir+"/accepted_hits.bam", countStrand))+"\n")
 					countScript.close()
-
 					mapScript.write("qsub " + countScriptPath +"\n")
 
 					#mapScript.write("python "+os.path.dirname(os.path.realpath(__mapScript__))+"/quality_control.py " + outdir + " " + inputs.genome()+ " " + basedir+"/QC/"+line+"\n") 
