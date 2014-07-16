@@ -1,4 +1,4 @@
-Complete-Seq RNAseq Pipeline:
+SPEctRA RNAseq Pipeline:
 =============================
 
 ###Dependencies:###
