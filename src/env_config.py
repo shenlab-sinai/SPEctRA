@@ -38,16 +38,17 @@ class ImportSettings(object):
 		err = "#BSUB -e "+directory+"/"+project+"/logs/"+logDir+"/"+ name+".log"+"\n"
 		header = env + acc+queue+proc + time + jobID + log + err + "\n"
 		return header 
-	def bsubHeader(self,name,directory,project,proc,logDir,time="24:00",queue="scavenger"): #hardcoded for minerva args. Change this to be more flexible
+	def bsubHeader(self,name,directory,project,proc,logDir,time="21:00",queue="scavenger"): #hardcoded for minerva args. Change this to be more flexible
 		env = "#!/bin/bash"+"\n"
+		cluster = "#BSUB -m mothra"+"\n"
 		queue= "#BSUB -q "+queue+"\n"
 		proc = "#BSUB -n "+proc+"\n"
 		Rflag ="#BSUB -R span[hosts=1]"+"\n"
-		time = "#BSUB -W walltime="+time+"\n"
-		jobID = "#BSUB -N "+name+"\n"
+		time = "#BSUB -W "+time+"\n"
+		jobID = "#BSUB -J "+name+"\n"
 		log = "#BSUB -o "+directory+"/"+project+"/logs/"+logDir+"/"+ name+".log"+"\n"
 		err = "#BSUB -e "+directory+"/"+project+"/logs/"+logDir+"/"+ name+".log"+"\n"
-		header = env +queue+proc +Rflag+ time + jobID + log + err + "\n"
+		header = env +cluster+ queue+proc +Rflag+ time + jobID + log + err + "\n"
 		return header  
 # 	def openConfig(self):
 

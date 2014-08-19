@@ -120,10 +120,10 @@ class ScriptWriter(object):
 		
 
 		########################### resolve STAR later ##################################################
-		# if inputs.aligner() == "STAR": #opens a single STAR mapping pbs mapScript (himem queues only)
+		# if inputs.aligner() == "STAR": #opens a single STAR mapping.lsf mapScript (himem queues only)
 		# 	if settings.getEnv()["cluster"] is not 'None': 
-		# 		mapScript = open(settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/mapping/"+inputs.projName()+".STAR.mapping.pbs", "w")
-		# 		mapScript.write(settings.pbsHeader(inputs.projName()+".STAR",settings.homeDir(),inputs.projName(),str(inputs.proc()),queue="himem_24hr")+"\n")
+		# 		mapScript = open(settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/mapping/"+inputs.projName()+".STAR.mapping.lsf", "w")
+		# 		mapScript.write(settings.lsfHeader(inputs.projName()+".STAR",settings.homeDir(),inputs.projName(),str(inputs.proc()),queue="himem_24hr")+"\n")
 				
 		for line in self.util.subDirectories(inputs.fastQdir()):
 			
@@ -144,7 +144,7 @@ class ScriptWriter(object):
 				countStrand = "yes"
 			
 			########################### resolve STAR later ##################################################
-			# if inputs.aligner() == "STAR": #opens a single STAR mapping pbs mapScript (himem queues only)
+			# if inputs.aligner() == "STAR": #opens a single STAR mapping.lsf mapScript (himem queues only)
 			# 	if settings.getEnv()["cluster"] is not 'None':
 			# 		mapScript.write("mkdir "+outdir+"\n") 
 			# 		mapScript.write("cd "+outdir+"\n")
@@ -152,19 +152,19 @@ class ScriptWriter(object):
 
 
 			###open qc and counting scripts
-			qcScriptPath = settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/QC/"+line+".QC.pbs"
+			qcScriptPath = settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/QC/"+line+".QC.lsf"
 			qcScript = open(qcScriptPath, "w")
 
-			countScriptPath = settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/counts/"+line+".counts.pbs" 
+			countScriptPath = settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/counts/"+line+".counts.lsf" 
 			countScript = open(countScriptPath, "w")
 
 
 
 			if inputs.aligner() == "tophat2": #logic for tophat alignment...
 				if settings.getEnv()["cluster"] is not 'None': #...on a cluster such as minerva
-					mapScript = open(settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/mapping/"+line+".tophat2.mapping.pbs", "w") #change to relative path
-					#insert pbs headers
-					mapScript.write(settings.pbsHeader(inputs.projName()+"."+line,settings.homeDir(),inputs.projName(),str(inputs.proc()),"mapping"))
+					mapScript = open(settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/mapping/"+line+".tophat2.mapping.lsf", "w") #change to relative path
+					#insert.lsf headers
+					mapScript.write(settings.bsubHeader(inputs.projName()+"."+line,settings.homeDir(),inputs.projName(),str(inputs.proc()),"mapping"))
 					#insert load modules
 
 					#hardcoded env modules
@@ -177,25 +177,25 @@ class ScriptWriter(object):
 					#insert post-processing
 					#insert QC
 
-					#launch qc qsub here
-					qcScript.write(settings.pbsHeader(inputs.projName()+"."+line,settings.homeDir(),inputs.projName(),"1","QC",time="10:00:00",))
+					#launch qc bsub < here
+					qcScript.write(settings.bsubHeader(inputs.projName()+"."+line,settings.homeDir(),inputs.projName(),"1","QC",time="10:00",))
 					qcScript.write("module load python/2.7.6"+"\n"+"module load py_packages/2.7"+"\n"+"module load samtools"+"\n")
 					qcScript.write("python "+os.path.dirname(os.path.realpath(__file__))+"/quality_control.py " + outdir + " " + inputs.genome()+ " " + basedir+"/QC/"+line+"\n")
 
-					mapScript.write("qsub " + qcScriptPath +"\n")
+					mapScript.write("bsub < " + qcScriptPath +"\n")
 
 
-					countScript.write(settings.pbsHeader(inputs.projName()+"."+line,settings.homeDir(),inputs.projName(),"1","counts",time="10:00:00",))
+					countScript.write(settings.bsubHeader(inputs.projName()+"."+line,settings.homeDir(),inputs.projName(),"1","counts",time="24:00",))
 					countScript.write("module load python/2.7.6"+"\n"+"module load py_packages/2.7"+"\n"+"module load samtools"+"\n")
 					countScript.write("cd "+outdir+"\n")
 					countScript.write(str(count.htseqcounts(outdir+"/accepted_hits.bam", countStrand))+"\n")
 					countScript.close()
-					mapScript.write("qsub " + countScriptPath +"\n")
+					mapScript.write("bsub < " + countScriptPath +"\n")
 
 					#mapScript.write("python "+os.path.dirname(os.path.realpath(__mapScript__))+"/quality_control.py " + outdir + " " + inputs.genome()+ " " + basedir+"/QC/"+line+"\n") 
 					
 
-					#launch mapping qsub here
+					#launch mapping bsub < here
 					#mapScript.write("cd "+outdir+"\n")
 					#mapScript.write(str(count.htseqcounts(outdir+"/accepted_hits.bam", countStrand))+"\n")
 
