@@ -95,11 +95,15 @@ class GatherData(object):
 			if regex.search(line) is not None:
 				read = re.findall(exp, line)
 				samples.update({line:read[0]})
+			if regex.search(line) is None:
+				samples.update({line:"R1"})
 		#return dictionary of values
 		return samples
 	#these functions parse R1 and R2 data and return a string 
 	def read1(self,fastq):
 		R1 = ",".join(sorted([str(x) for x in self.util.findKey(self.studySamples(fastq),'R1')]))
+		if R1 is None:
+			R1 = self.studySamples(fastq)
 		return R1
 
 	def read2(self,fastq):
