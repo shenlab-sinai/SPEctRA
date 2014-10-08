@@ -71,7 +71,7 @@ class GatherData(object):
 	util = Utility()
 	def mergeReplicates(self,sampledir, repDir=None,mergeFile=None,):
 		
-		sample = glob.glob(sampledir+"/*.fastq.gz")
+		sample = glob.glob(sampledir+"/*.fastq*")
 
 		if mergeFile is not None:
 
