@@ -8,12 +8,12 @@ Short-read_aligners:
     STAR: rna-star/2.3.0e
 genomes: 
     mouse: 
-        rRNApath: /sc/orga/work/purusi01/rRNA_mm9.bed
+        rRNApath: /sc/orga/work/purusi01/mm10/rRNA.bed
         tophat2:  
-            gtf: /sc/orga/work/purusi01/Mus_musculus/Ensembl/NCBIM37/Annotation/Genes/genes.gtf
-            index: /sc/orga/work/purusi01/Mus_musculus/Ensembl/NCBIM37/Sequence/Bowtie2Index/genome
-        exonicPath: 
-        intronicPath:
+            gtf: /sc/orga/work/purusi01/mm10/gencode.vM2.annotation.gtf
+            index: /sc/orga/work/purusi01/mm10/genome
+        exonicPath: /sc/orga/work/purusi01/mm10/gencode_v14_exon_merged.bed
+        intronicPath: /sc/orga/work/purusi01/mm10/gencode_v14_intron.bed
         intragenicPath:
         intergenicPath:
         STAR:
@@ -29,13 +29,13 @@ genomes:
         intergenicPath:
         STAR:
             path:
-    mm10_ERCC: 
+    mm9: 
         rRNApath: /sc/orga/work/purusi01/mm10/rRNA.bed
         tophat2:  
-            gtf: /sc/orga/work/purusi01/mm10/gencode.vM2.annotation.gtf
-            index: /sc/orga/work/purusi01/mm10/genome_ERCC
-        exonicPath: 
-        intronicPath:
+            gtf: /sc/orga/work/purusi01/mm9/genes.gtf
+            index: /sc/orga/work/purusi01/mm9/Bowtie2Index/genome
+        exonicPath: /sc/orga/work/purusi01/mm10/gencode_v14_exon_merged.bed
+        intronicPath: /sc/orga/work/purusi01/mm10/gencode_v14_intron.bed
         intragenicPath:
         intergenicPath:
         STAR:
