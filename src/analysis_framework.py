@@ -28,8 +28,11 @@ class SetProjectEnv(object): #creates project folders (relative paths) before pr
 		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"QC")
 		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"counts")
 		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"scripts/mapping")
+		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"scripts/QC")
+		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"scripts/counts")#for now
 		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"logs/mapping")
-		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"scripts/other")#for now
+		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"logs/QC")
+		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"logs/counts")
 	#os.system("mkdir "+self.projDir+"/"+"differential_analysis") Add new method to do this later
 
 class UserInputsConfigFile(object): #parses user submitted YAML file ( single command line options should be placed elswhere)
@@ -68,7 +71,7 @@ class GatherData(object):
 	util = Utility()
 	def mergeReplicates(self,sampledir, repDir=None,mergeFile=None,):
 		
-		sample = glob.glob(sampledir+"/*.fastq.gz")
+		sample = glob.glob(sampledir+"/*.fastq*")
 
 		if mergeFile is not None:
 
@@ -77,7 +80,7 @@ class GatherData(object):
 			for row in paths:
 				replicates[row[0]]=row[1:]
 			if replicates.get(os.path.basename(sampledir)) is not None:
-			 	sample2 = glob.glob(repDir+"/"+replicates[os.path.basename(sampledir)][0]+"/*.fastq.gz")
+			 	sample2 = glob.glob(replicates[os.path.basename(sampledir)][0]+"/*.fastq.gz")
 			 	sample = sample+sample2
 
 		return sample
@@ -92,11 +95,15 @@ class GatherData(object):
 			if regex.search(line) is not None:
 				read = re.findall(exp, line)
 				samples.update({line:read[0]})
+			if regex.search(line) is None:
+				samples.update({line:"R1"})
 		#return dictionary of values
 		return samples
 	#these functions parse R1 and R2 data and return a string 
 	def read1(self,fastq):
 		R1 = ",".join(sorted([str(x) for x in self.util.findKey(self.studySamples(fastq),'R1')]))
+		if R1 is None:
+			R1 = self.studySamples(fastq)
 		return R1
 
 	def read2(self,fastq):
@@ -114,10 +121,13 @@ class ScriptWriter(object):
 		# star command in one script, himem
 		#mkdir and change script location to more generalized directory name
 		
-		if inputs.aligner() == "STAR": #opens a single STAR mapping pbs file (himem queues only)
-			if settings.getEnv()["cluster"] is not 'None': 
-				file = open(settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/mapping/"+inputs.projName()+".STAR.mapping.pbs", "w")
-				file.write(settings.pbsHeader(inputs.projName()+".STAR",settings.homeDir(),inputs.projName(),str(inputs.proc()),queue="himem_24hr")+"\n")
+		
+
+		########################### resolve STAR later ##################################################
+		# if inputs.aligner() == "STAR": #opens a single STAR mapping.lsf mapScript (himem queues only)
+		# 	if settings.getEnv()["cluster"] is not 'None': 
+		# 		mapScript = open(settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/mapping/"+inputs.projName()+".STAR.mapping.lsf", "w")
+		# 		mapScript.write(settings.lsfHeader(inputs.projName()+".STAR",settings.homeDir(),inputs.projName(),str(inputs.proc()),queue="himem_24hr")+"\n")
 				
 		for line in self.util.subDirectories(inputs.fastQdir()):
 			
@@ -131,37 +141,69 @@ class ScriptWriter(object):
 			align = Mapping(self.fastqs.read1(sample),inputs.proc(), outdir,settings.genomes()[inputs.genome()][inputs.aligner()],fastqR2=self.fastqs.read2(sample))
 			count = Counting(settings.genomes()[inputs.genome()]['tophat2']['gtf'],basedir+"/counts/"+line+"."+"htseq_counts"+".txt")
 			countStrand = "no"
+			
+
 			if inputs.strand() == "fr-secondstrand":
 				align = Mapping(self.fastqs.read1(sample),inputs.proc(), outdir,settings.genomes()[inputs.genome()][inputs.aligner()],libType="fr-secondstrand",fastqR2=self.fastqs.read2(sample)) 
 				countStrand = "yes"
 			
-			if inputs.aligner() == "STAR": #opens a single STAR mapping pbs file (himem queues only)
-				if settings.getEnv()["cluster"] is not 'None':
-					file.write("mkdir "+outdir+"\n") 
-					file.write("cd "+outdir+"\n")
-					file.write(str(align.STAR()+"\n"))
+			########################### resolve STAR later ##################################################
+			# if inputs.aligner() == "STAR": #opens a single STAR mapping.lsf mapScript (himem queues only)
+			# 	if settings.getEnv()["cluster"] is not 'None':
+			# 		mapScript.write("mkdir "+outdir+"\n") 
+			# 		mapScript.write("cd "+outdir+"\n")
+			# 		mapScript.write(str(align.STAR()+"\n"))
+
+
+			###open qc and counting scripts
+			qcScriptPath = settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/QC/"+line+".QC.lsf"
+			qcScript = open(qcScriptPath, "w")
+
+			countScriptPath = settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/counts/"+line+".counts.lsf" 
+			countScript = open(countScriptPath, "w")
+
+
 
 			if inputs.aligner() == "tophat2": #logic for tophat alignment...
 				if settings.getEnv()["cluster"] is not 'None': #...on a cluster such as minerva
-					file = open(settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/mapping/"+line+".tophat2.mapping.pbs", "w") #change to relative path
-					#insert pbs headers
-					file.write(settings.pbsHeader(inputs.projName()+"."+line,settings.homeDir(),inputs.projName(),str(inputs.proc())))
+					mapScript = open(settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/mapping/"+line+".tophat2.mapping.lsf", "w") #change to relative path
+					#insert.lsf headers
+					mapScript.write(settings.bsubHeader(inputs.projName()+"."+line,settings.homeDir(),inputs.projName(),str(inputs.proc()),"mapping"))
 					#insert load modules
 
 					#hardcoded env modules
-					file.write("module load python/2.7.3"+"\n"+"module load pysam/0.6"+"\n"+"module load pyyaml/3.10"+"\n"+"module load htseq"+"\n")
+					mapScript.write("module load python/2.7.6"+"\n"+"module load py_packages/2.7"+"\n")
 
-					file.write("module load samtools"+"\n"+"module load " + settings.mappingPaths()['bowtie2'] +"\n"+"module load " + settings.mappingPaths()['tophat2'] +"\n")
+					mapScript.write("module load samtools"+"\n"+"module load " + settings.mappingPaths()['bowtie2'] +"\n"+"module load " + settings.mappingPaths()['tophat2'] +"\n")
 					#bowtie Index
-					file.write("export BOWTIE2_INDEXES="+settings.genomes()[inputs.genome()][inputs.aligner()]['index'] +"\n")
-					file.write(str(align.tophat()+"\n"))
+					mapScript.write("export BOWTIE2_INDEXES="+settings.genomes()[inputs.genome()][inputs.aligner()]['index'] +"\n")
+					mapScript.write(str(align.tophat()+"\n"))
 					#insert post-processing
-					#insert QC 
-					file.write("python "+os.path.dirname(os.path.realpath(__file__))+"/quality_control.py " + outdir + " " + inputs.genome()+ " " + basedir+"/QC/"+line+"\n") 
-					file.write("cd "+outdir+"\n")
-					file.write(str(count.htseqcounts(outdir+"/accepted_hits.bam", countStrand))+"\n")
+					#insert QC
 
-		file.close()
+					#launch qc bsub < here
+					qcScript.write(settings.bsubHeader(inputs.projName()+"."+line,settings.homeDir(),inputs.projName(),"1","QC",time="10:00",))
+					qcScript.write("module load python/2.7.6"+"\n"+"module load py_packages/2.7"+"\n"+"module load samtools"+"\n")
+					qcScript.write("python "+os.path.dirname(os.path.realpath(__file__))+"/quality_control.py " + outdir + " " + inputs.genome()+ " " + basedir+"/QC/"+line+"\n")
+
+					mapScript.write("bsub < " + qcScriptPath +"\n")
+
+
+					countScript.write(settings.bsubHeader(inputs.projName()+"."+line,settings.homeDir(),inputs.projName(),"1","counts",time="24:00",))
+					countScript.write("module load python/2.7.6"+"\n"+"module load py_packages/2.7"+"\n"+"module load samtools"+"\n")
+					countScript.write("cd "+outdir+"\n")
+					countScript.write(str(count.htseqcounts(outdir+"/accepted_hits.bam", countStrand))+"\n")
+					countScript.close()
+					mapScript.write("bsub < " + countScriptPath +"\n")
+
+					#mapScript.write("python "+os.path.dirname(os.path.realpath(__mapScript__))+"/quality_control.py " + outdir + " " + inputs.genome()+ " " + basedir+"/QC/"+line+"\n") 
+					
+
+					#launch mapping bsub < here
+					#mapScript.write("cd "+outdir+"\n")
+					#mapScript.write(str(count.htseqcounts(outdir+"/accepted_hits.bam", countStrand))+"\n")
+
+		mapScript.close()
 
 	def writeCounterScript(self):
 		pass

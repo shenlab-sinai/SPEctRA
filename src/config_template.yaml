@@ -1,30 +1,41 @@
 Environment:
     cluster: Minerva
     server: 
-project_directory: /scratch/purusi01/RNAseq_projects
+project_directory: /sc/orga//scratch/purusi01/RNAseq_projects
 Short-read_aligners:
     tophat2: tophat/2.0.9
     bowtie2: bowtie2/2.1.0
     STAR: rna-star/2.3.0e
 genomes: 
     mouse: 
-        rRNApath: /scratch/purusi01/Mus_musculus/Ensembl/NCBIM37/Annotation/Genes/rRNA.bed
+        rRNApath: /sc/orga/work/purusi01/mm10/rRNA.bed
         tophat2:  
-            gtf: /scratch/purusi01/Mus_musculus/Ensembl/NCBIM37/Annotation/Genes/genes.gtf
-            index: /scratch/purusi01/Mus_musculus/Ensembl/NCBIM37/Sequence/Bowtie2Index/genome
-        exonicPath: 
-        intronicPath:
+            gtf: /sc/orga/work/purusi01/mm10/gencode.vM2.annotation.gtf
+            index: /sc/orga/work/purusi01/mm10/genome
+        exonicPath: /sc/orga/work/purusi01/mm10/gencode_v14_exon_merged.bed
+        intronicPath: /sc/orga/work/purusi01/mm10/gencode_v14_intron.bed
         intragenicPath:
         intergenicPath:
         STAR:
             path: 
     hg19_ERCC: 
-        rRNApath: /scratch/purusi01/hg19_ERCC/Homo_sapiens/UCSC/hg19/Annotation/Genes/hg19_rRNA.bed
+        rRNApath: /sc/gaus/scratch/purusi01/hg19_ERCC/Homo_sapiens/UCSC/hg19/Annotation/Genes/hg19_rRNA.bed
         tophat2:  
-            gtf: /scratch/purusi01/hg19_ERCC/Homo_sapiens/UCSC/hg19/Annotation/Genes/genes_ERCC.gtf
-            index: /scratch/purusi01/hg19_ERCC/Homo_sapiens/UCSC/hg19/Sequence/Bowtie2Index/genome
+            gtf: /sc/gaus/scratch/purusi01/hg19_ERCC/Homo_sapiens/UCSC/hg19/Annotation/Genes/gencode.v19.annotation.gtf
+            index: /sc/gaus/scratch/purusi01/hg19_ERCC/Homo_sapiens/UCSC/hg19/Sequence/Bowtie2Index/genome_ERCC
         exonicPath: 
         intronicPath:
+        intragenicPath:
+        intergenicPath:
+        STAR:
+            path:
+    mm9: 
+        rRNApath: /sc/orga/work/purusi01/mm10/rRNA.bed
+        tophat2:  
+            gtf: /sc/orga/work/purusi01/mm9/genes.gtf
+            index: /sc/orga/work/purusi01/mm9/Bowtie2Index/genome
+        exonicPath: /sc/orga/work/purusi01/mm10/gencode_v14_exon_merged.bed
+        intronicPath: /sc/orga/work/purusi01/mm10/gencode_v14_intron.bed
         intragenicPath:
         intergenicPath:
         STAR:

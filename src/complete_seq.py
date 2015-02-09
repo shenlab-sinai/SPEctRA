@@ -24,7 +24,7 @@ def main():
 		directories.makeProj() #project directory created
 		directories.startMappingEnv() #mapping subdirectories created
 		writer.writeMappingScript(options.pipeline_input,options.merge_table)
-		util.batchQsub(settings.homeDir()+"/"+pipeline_command.projName()+"/scripts/mapping/") #omit for testing purposes
+		util.batchBsub(settings.homeDir()+"/"+pipeline_command.projName()+"/scripts/mapping/") #omit for testing purposes
 
 if __name__ == '__main__':
     main()

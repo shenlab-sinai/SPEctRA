@@ -19,3 +19,6 @@ class Utility(object):
 	def batchQsub(self,directory): #launch qsub scripts into the respective queue
 		for line in glob.glob(directory +"/*.pbs"):
 			os.system("qsub " + line)
+	def batchBsub(self,directory): #launch qsub scripts into the respective queue
+		for line in glob.glob(directory +"/*.lsf"):
+			os.system("bsub <" + line)
