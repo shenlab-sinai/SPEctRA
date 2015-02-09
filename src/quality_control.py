@@ -46,13 +46,15 @@ class GetReads(object):
 		return intragenic
 	
 	def exon(self):
-		command = "samtools view "+self.dir+"/accepted_hits.bam -L "+ settings.genomes()[self.genome]["exonicPath"] + " " + shell_splitUnique
+		command = "samtools view -F 12"+self.dir+"/accepted_hits.bam -L "+ settings.genomes()[self.genome]["exonicPath"] + " " + shell_splitUnique
 		exon = subprocess.check_output(command, shell=True)
 		return exon
+
 	def intron(self):
-		intron = self.intragenic() - self.exon
-		return intron
-	
+		command = "samtools view -F 12"+self.dir+"/accepted_hits.bam -L "+ settings.genomes()[self.genome]["intronicPath"] + " " + shell_splitUnique
+		intron = subprocess.check_output(command, shell=True)
+		return intron 
+
 	def intergenic(self):
 		intergenic = self.mappedTotal - self.intragenic()
 		return intergenic
@@ -93,13 +95,13 @@ class QCReport(object):
 		## change name to pass sample name to method
 		
 
-		sample = fileName +"\t"+ str(self.rawReads.tophatTotal()).strip("\n")+"\t"+str(self.rawReads.mappedTotal()).strip("\n")+"\t"+str(self.rawReads.mitochondrial()).strip("\n")+"\t"+str(self.rawReads.ribosomal()).strip("\n")+"\t"+str(mapping)+"\t"+str(chrMTrate)+"\t"+str(rRNArate)+"\n"
+		sample = fileName +"\t"+ str(self.rawReads.tophatTotal()).strip("\n")+"\t"+str(self.rawReads.mappedTotal()).strip("\n")+"\t"+str(self.rawReads.mitochondrial()).strip("\n")+"\t"+str(self.rawReads.ribosomal()).strip("\n")+"\t"+str(mapping)+"\t"+str(chrMTrate)+"\t"+str(rRNArate)+ "\n"#"\t"+str(self.rawReads.exon()).strip("\n")+"\t"+str(self.rawReads.intron()).strip("\n")+"\n"
 		#sample = "Name" + "\t" + str(mapping) +"\t"+ str(intragenic)+ "\t" + str(exonic) + "\t" + str(intronic) + "\t"+ str(intragenic) + "\t" + str(rRNArate)+"\t"+str(chrMTrate) + "\n"
 		return sample
 	
 	def writeReport(self,fileName):
 		file = open(fileName+".qcMetrics.txt", "w") #change to relative path
-		file.write("sample"+"\t"+"total_reads"+"\t"+"mapped_reads"+"\t"+"Mitochondrial_RNA_reads"+"\t"+"rRNA_reads"+"\t"+"mapping_rate"+"\t"+"Mitochondrial_RNA_rate"+"\t"+"rRNA_rate"+"\n")
+		file.write("sample"+"\t"+"total_reads"+"\t"+"mapped_reads"+"\t"+"Mitochondrial_RNA_reads"+"\t"+"rRNA_reads"+"\t"+"mapping_rate"+"\t"+"Mitochondrial_RNA_rate"+"\t"+"rRNA_rate"+"\n")#"\t"+"exonic_rate"+"\t"+"intronic_rate"+"\n")
 		file.write(self.gatherReport(os.path.basename(fileName)))
 		file.close()
 
