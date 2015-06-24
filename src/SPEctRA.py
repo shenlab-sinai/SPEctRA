@@ -10,11 +10,13 @@ parser.add_option('-p', dest="pipeline_input")
 parser.add_option('-m', dest="merge_table")
 options, remainder = parser.parse_args()
 
-settings = ImportSettings() #enviroment configuration settings
+settings = ImportSettings()  # enviroment configuration settings
 util = Utility()
+
+
 def main():
-	
 	#mapping
+
 	pipeline_command = UserInputsConfigFile(options.pipeline_input)
 	if pipeline_command.openConfig()["mapping"] is not None:
 
@@ -27,4 +29,4 @@ def main():
 		util.batchBsub(settings.homeDir()+"/"+pipeline_command.projName()+"/scripts/mapping/") #omit for testing purposes
 
 if __name__ == '__main__':
-    main()
+	main()
