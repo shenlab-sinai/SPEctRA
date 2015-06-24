@@ -66,6 +66,7 @@ class UserInputsConfigFile(object): #parses user submitted YAML file ( single co
 	def readCount(self):
 		countMethod = self.openConfig()['count']
 		return countMethod
+
 class GatherData(object):
 	#sort fastq samples to R1 and R2, even if multiple fastqs for one end are available
 	util = Utility()
@@ -195,6 +196,21 @@ class ScriptWriter(object):
 					countScript.write(str(count.htseqcounts(outdir+"/accepted_hits.bam", countStrand))+"\n")
 					countScript.close()
 					mapScript.write("bsub < " + countScriptPath +"\n")
+
+				if settings.getEnv()["server"] is not 'None':
+					
+					mapScript = open(settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/mapping/"+line+".tophat2.mapping.sh", "w")
+					mapScript.write("export BOWTIE2_INDEXES="+settings.genomes()[inputs.genome()][inputs.aligner()]['index'] +"\n")
+					mapScript.write(str(align.tophat()+"\n"))
+
+					qcScript.write("python "+os.path.dirname(os.path.realpath(__file__))+"/quality_control.py " + outdir + " " + inputs.genome()+ " " + basedir+"/QC/"+line+"\n")
+					mapScript.write("./" + qcScriptPath +"\n")
+
+					countScript.write("cd "+outdir+"\n")
+					countScript.write(str(count.htseqcounts(outdir+"/accepted_hits.bam", countStrand))+"\n")
+					countScript.close()
+					mapScript.write("./" + countScriptPath +"\n")
+
 
 					#mapScript.write("python "+os.path.dirname(os.path.realpath(__mapScript__))+"/quality_control.py " + outdir + " " + inputs.genome()+ " " + basedir+"/QC/"+line+"\n") 
 					
