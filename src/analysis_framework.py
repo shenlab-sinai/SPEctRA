@@ -194,7 +194,6 @@ class ScriptWriter(object):
 					countScript.write("module load python/2.7.6"+"\n"+"module load py_packages/2.7"+"\n"+"module load samtools"+"\n")
 					countScript.write("cd "+outdir+"\n")
 					countScript.write(str(count.htseqcounts(outdir+"/accepted_hits.bam", countStrand))+"\n")
-					countScript.close()
 					mapScript.write("bsub < " + countScriptPath +"\n")
 
 				if settings.getEnv()["server"] is not 'None':
@@ -218,7 +217,7 @@ class ScriptWriter(object):
 					#launch mapping bsub < here
 					#mapScript.write("cd "+outdir+"\n")
 					#mapScript.write(str(count.htseqcounts(outdir+"/accepted_hits.bam", countStrand))+"\n")
-
+		countScript.close()
 		mapScript.close()
 
 	def writeCounterScript(self):
