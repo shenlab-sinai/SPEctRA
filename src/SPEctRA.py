@@ -15,18 +15,21 @@ util = Utility()
 
 
 def main():
-	#mapping
+    # mapping
 
-	pipeline_command = UserInputsConfigFile(options.pipeline_input)
-	if pipeline_command.openConfig()["mapping"] is not None:
+    pipeline_command = UserInputsConfigFile(options.pipeline_input)
+    if pipeline_command.openConfig()["mapping"] is not None:
 
-		directories  = SetProjectEnv(settings.homeDir(),pipeline_command.projName())
-		writer = ScriptWriter() #simplify this
-		
-		directories.makeProj() #project directory created
-		directories.startMappingEnv() #mapping subdirectories created
-		writer.writeMappingScript(options.pipeline_input,options.merge_table)
-		util.batchBsub(settings.homeDir()+"/"+pipeline_command.projName()+"/scripts/mapping/") #omit for testing purposes
+        directories = SetProjectEnv(
+            settings.homeDir(), pipeline_command.projName())
+        writer = ScriptWriter()  # simplify this
+
+        directories.makeProj()  # project directory created
+        directories.startMappingEnv()  # mapping subdirectories created
+        writer.writeMappingScript(options.pipeline_input, options.merge_table)
+        # omit for testing purposes
+        util.batchBsub(
+            settings.homeDir() + "/" + pipeline_command.projName() + "/scripts/mapping/")
 
 if __name__ == '__main__':
-	main()
+    main()
