@@ -33,24 +33,6 @@ class Mapping(object):
     # def shortreadalinger(self) add as needed
 
 
-class Auxilery(object):  # post alignment manipulation
-
-    # figure out how to execute tasks (via script, at end of mapping or
-    # separate job)
-
-    def tophat(self):
-
-        tophat_prep = ""
-        return tophat_prep  # indexBam
-        pass
-
-    def STAR(self):
-        pass
-        # sortSam
-        # convertSamtoBam
-        # indexBam
-
-
 class Counting(object):
 
     def __init__(self, gtfPath, outFile):
