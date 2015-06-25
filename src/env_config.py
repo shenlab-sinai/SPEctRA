@@ -27,17 +27,6 @@ class ImportSettings(object):
 		#return dict of available short-read aligner paths/modules
 		aligner = self.openConfig()["Short-read_aligners"]
 		return aligner
-	def BSUBHeader(self,name,directory,project,proc,logDir,time="24:00:00", nodes ="1",queue="small_24hr"): #hardcoded for minerva args. Change this to be more flexible
-		env = "#!/bin/bash"+"\n"
-		acc = "" #BSUB -A acc_80"+"\n"
-		queue= "#BSUB -q "+queue+"\n"
-		proc = "#BSUB -l nodes="+nodes+":ppn="+proc+"\n"
-		time = "#BSUB -l walltime="+time+"\n"
-		jobID = "#BSUB -N "+name+"\n"
-		log = "#BSUB -o "+directory+"/"+project+"/logs/"+logDir+"/"+ name+".log"+"\n"
-		err = "#BSUB -e "+directory+"/"+project+"/logs/"+logDir+"/"+ name+".log"+"\n"
-		header = env + acc+queue+proc + time + jobID + log + err + "\n"
-		return header 
 	def bsubHeader(self,name,directory,project,proc,logDir,time="21:00",queue="scavenger"): #hardcoded for minerva args. Change this to be more flexible
 		env = "#!/bin/bash"+"\n"
 		cluster = "#BSUB -m mothra"+"\n"
