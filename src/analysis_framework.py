@@ -166,7 +166,7 @@ class ScriptWriter(object):
 
 
 			if inputs.aligner() == "tophat2": #logic for tophat alignment...
-				if settings.getEnv()["cluster"] is not 'None': #...on a cluster such as minerva
+				if settings.getEnv()["cluster"] is not None: #...on a cluster such as minerva
 					mapScript = open(settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/mapping/"+line+".tophat2.mapping.lsf", "w") #change to relative path
 					#insert.lsf headers
 					mapScript.write(settings.bsubHeader(inputs.projName()+"."+line,settings.homeDir(),inputs.projName(),str(inputs.proc()),"mapping"))
@@ -179,8 +179,7 @@ class ScriptWriter(object):
 					#bowtie Index
 					mapScript.write("export BOWTIE2_INDEXES="+settings.genomes()[inputs.genome()][inputs.aligner()]['index'] +"\n")
 					mapScript.write(str(align.tophat()+"\n"))
-					#insert post-processing
-					#insert QC
+
 
 					#launch qc bsub < here
 					qcScript.write(settings.bsubHeader(inputs.projName()+"."+line,settings.homeDir(),inputs.projName(),"1","QC",time="10:00",))
@@ -196,19 +195,18 @@ class ScriptWriter(object):
 					countScript.write(str(count.htseqcounts(outdir+"/accepted_hits.bam", countStrand))+"\n")
 					mapScript.write("bsub < " + countScriptPath +"\n")
 
-				if settings.getEnv()["server"] is not 'None':
+				if settings.getEnv()["server"] is not None:
 					
 					mapScript = open(settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/mapping/"+line+".tophat2.mapping.sh", "w")
 					mapScript.write("export BOWTIE2_INDEXES="+settings.genomes()[inputs.genome()][inputs.aligner()]['index'] +"\n")
 					mapScript.write(str(align.tophat()+"\n"))
 
-					qcScript.write("python "+os.path.dirname(os.path.realpath(__file__))+"/quality_control.py " + outdir + " " + inputs.genome()+ " " + basedir+"/QC/"+line+"\n")
-					mapScript.write("./" + qcScriptPath +"\n")
+					# qcScript.write("python "+os.path.dirname(os.path.realpath(__file__))+"/quality_control.py " + outdir + " " + inputs.genome()+ " " + basedir+"/QC/"+line+"\n")
+					# mapScript.write("./" + qcScriptPath +"\n")
 
-					countScript.write("cd "+outdir+"\n")
-					countScript.write(str(count.htseqcounts(outdir+"/accepted_hits.bam", countStrand))+"\n")
-					countScript.close()
-					mapScript.write("./" + countScriptPath +"\n")
+					# countScript.write("cd "+outdir+"\n")
+					# countScript.write(str(count.htseqcounts(outdir+"/accepted_hits.bam", countStrand))+"\n")
+					# mapScript.write("./" + countScriptPath +"\n")
 
 
 					#mapScript.write("python "+os.path.dirname(os.path.realpath(__mapScript__))+"/quality_control.py " + outdir + " " + inputs.genome()+ " " + basedir+"/QC/"+line+"\n") 
