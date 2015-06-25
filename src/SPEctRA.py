@@ -32,11 +32,11 @@ def main():
             util.batchBsub(
                 settings.homeDir() + "/" + pipeline_command.projName() + "/scripts/mapping/")
         if settings.getEnv()["server"] is not None:
-            util.batchExecute(
+            util.chmodAll(
                 settings.homeDir() + "/" + pipeline_command.projName() + "/scripts/mapping/")
-            util.batchExecute(
+            util.chmodAll(
                 settings.homeDir() + "/" + pipeline_command.projName() + "/scripts/counts/")
-            util.batchExecute(
+            util.chmodAll(
                 settings.homeDir() + "/" + pipeline_command.projName() + "/scripts/QC/")
 
 if __name__ == '__main__':

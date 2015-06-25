@@ -33,4 +33,4 @@ class Utility(object):
 
     def chmodAll(self, directory):
         for line in glob.glob(directory + "*.sh"):
-            os.system("chomd u+x " + line)
+            os.system("chmod u+x " + line)
