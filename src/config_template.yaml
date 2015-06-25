@@ -1,28 +1,28 @@
 Environment:
-    cluster: Minerva
-    server: 
-project_directory: /sc/orga//scratch/purusi01/RNAseq_projects
+    cluster: 
+    server: local
+project_directory: /path/to/project/directory/
 Short-read_aligners:
-    tophat2: tophat/2.0.9
-    bowtie2: bowtie2/2.1.0
-    STAR: rna-star/2.3.0e
+    tophat2: tophat2/version
+    bowtie2: bowtie2/version
+    STAR: STAR/version
 genomes: 
     mouse: 
-        rRNApath: /sc/orga/work/purusi01/mm10/rRNA.bed
-        tophat2:  
-            gtf: /sc/orga/work/purusi01/mm10/gencode.vM2.annotation.gtf
-            index: /sc/orga/work/purusi01/mm10/genome
-        exonicPath: /sc/orga/work/purusi01/mm10/gencode_v14_exon_merged.bed
-        intronicPath: /sc/orga/work/purusi01/mm10/gencode_v14_intron.bed
+        rRNApath: /path/to/rRNA/gtf
+        tophat2: 
+            gtf: /path/to/genome/annotation
+            index: /path/to/tophat2/genome/
+        exonicPath: 
+        intronicPath: 
         intragenicPath:
         intergenicPath:
         STAR:
             path: 
     hg19_ERCC: 
-        rRNApath: /sc/gaus/scratch/purusi01/hg19_ERCC/Homo_sapiens/UCSC/hg19/Annotation/Genes/hg19_rRNA.bed
+        rRNApath: 
         tophat2:  
-            gtf: /sc/gaus/scratch/purusi01/hg19_ERCC/Homo_sapiens/UCSC/hg19/Annotation/Genes/gencode.v19.annotation.gtf
-            index: /sc/gaus/scratch/purusi01/hg19_ERCC/Homo_sapiens/UCSC/hg19/Sequence/Bowtie2Index/genome_ERCC
+            gtf: 
+            index: 
         exonicPath: 
         intronicPath:
         intragenicPath:
@@ -30,12 +30,12 @@ genomes:
         STAR:
             path:
     mm9: 
-        rRNApath: /sc/orga/work/purusi01/mm10/rRNA.bed
+        rRNApath: 
         tophat2:  
-            gtf: /sc/orga/work/purusi01/mm9/genes.gtf
-            index: /sc/orga/work/purusi01/mm9/Bowtie2Index/genome
-        exonicPath: /sc/orga/work/purusi01/mm10/gencode_v14_exon_merged.bed
-        intronicPath: /sc/orga/work/purusi01/mm10/gencode_v14_intron.bed
+            gtf: 
+            index: 
+        exonicPath: 
+        intronicPath: 
         intragenicPath:
         intergenicPath:
         STAR:
