@@ -7,7 +7,7 @@ import re
 import csv
 from utils import *
 from env_config import *
-from mapping import *
+from commands import *
 
 #Classes/methods to get data and prepare it for specified analysis tasks
 #R wrappers relevent to this class
