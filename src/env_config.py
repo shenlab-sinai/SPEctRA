@@ -36,7 +36,8 @@ class ImportSettings(object):
         return aligner
 
     # hardcoded for minerva args. Change this to be more flexible
-    def bsubHeader(self, name, directory, project, proc, logDir, time="21:00", queue="scavenger"):
+    def bsubHeader(self, name, directory, project, proc,
+                   logDir, time="21:00", queue="scavenger"):
         env = "#!/bin/bash" + "\n"
         cluster = "#BSUB -m mothra" + "\n"
         queue = "#BSUB -q " + queue + "\n"
@@ -58,6 +59,3 @@ class ImportSettings(object):
 
 
 # BSUB args may be stored as dictionary or yaml entries for user input
-
-#test = ImportSettings()
-# print test.genomes()["tophat2"]["mouse"]["gtf"]
