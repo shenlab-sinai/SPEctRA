@@ -156,9 +156,7 @@ class ScriptWriter(object):
 			# 		mapScript.write(str(align.STAR()+"\n"))
 
 
-			###open qc and counting scripts
-			qcScriptPath = settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/QC/"+line+".QC.lsf"
-			qcScript = open(qcScriptPath, "w")
+
 
 			countScriptPath = settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/counts/"+line+".counts.lsf" 
 			countScript = open(countScriptPath, "w")
@@ -182,13 +180,16 @@ class ScriptWriter(object):
 
 
 					#launch qc bsub < here
+					qcScriptPath = settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/QC/"+line+".QC.lsf"
+					qcScript = open(qcScriptPath, "w")
 					qcScript.write(settings.bsubHeader(inputs.projName()+"."+line,settings.homeDir(),inputs.projName(),"1","QC",time="10:00",))
 					qcScript.write("module load python/2.7.6"+"\n"+"module load py_packages/2.7"+"\n"+"module load samtools"+"\n")
 					qcScript.write("python "+os.path.dirname(os.path.realpath(__file__))+"/quality_control.py " + outdir + " " + inputs.genome()+ " " + basedir+"/QC/"+line+"\n")
 
 					mapScript.write("bsub < " + qcScriptPath +"\n")
 
-
+					countScriptPath = settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/counts/"+line+".counts.lsf" 
+					countScript = open(countScriptPath, "w")
 					countScript.write(settings.bsubHeader(inputs.projName()+"."+line,settings.homeDir(),inputs.projName(),"1","counts",time="24:00",))
 					countScript.write("module load python/2.7.6"+"\n"+"module load py_packages/2.7"+"\n"+"module load samtools"+"\n")
 					countScript.write("cd "+outdir+"\n")
@@ -201,12 +202,17 @@ class ScriptWriter(object):
 					mapScript.write("export BOWTIE2_INDEXES="+settings.genomes()[inputs.genome()][inputs.aligner()]['index'] +"\n")
 					mapScript.write(str(align.tophat()+"\n"))
 
-					# qcScript.write("python "+os.path.dirname(os.path.realpath(__file__))+"/quality_control.py " + outdir + " " + inputs.genome()+ " " + basedir+"/QC/"+line+"\n")
-					# mapScript.write("./" + qcScriptPath +"\n")
 
-					# countScript.write("cd "+outdir+"\n")
-					# countScript.write(str(count.htseqcounts(outdir+"/accepted_hits.bam", countStrand))+"\n")
-					# mapScript.write("./" + countScriptPath +"\n")
+					qcScriptPath = settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/QC/"+line+".QC.sh"
+					qcScript = open(qcScriptPath, "w")
+					qcScript.write("python "+os.path.dirname(os.path.realpath(__file__))+"/quality_control.py " + outdir + " " + inputs.genome()+ " " + basedir+"/QC/"+line+"\n")
+					mapScript.write("./" + qcScriptPath +"\n")
+
+					countScriptPath = settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/counts/"+line+".counts.lsf" 
+					countScript = open(countScriptPath, "w")
+					countScript.write("cd "+outdir+"\n")
+					countScript.write(str(count.htseqcounts(outdir+"/accepted_hits.bam", countStrand))+"\n")
+					mapScript.write("./" + countScriptPath +"\n")
 
 
 					#mapScript.write("python "+os.path.dirname(os.path.realpath(__mapScript__))+"/quality_control.py " + outdir + " " + inputs.genome()+ " " + basedir+"/QC/"+line+"\n") 
