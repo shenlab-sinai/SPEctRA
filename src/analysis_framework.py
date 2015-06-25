@@ -155,14 +155,6 @@ class ScriptWriter(object):
 			# 		mapScript.write("cd "+outdir+"\n")
 			# 		mapScript.write(str(align.STAR()+"\n"))
 
-
-
-
-			countScriptPath = settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/counts/"+line+".counts.lsf" 
-			countScript = open(countScriptPath, "w")
-
-
-
 			if inputs.aligner() == "tophat2": #logic for tophat alignment...
 				if settings.getEnv()["cluster"] is not None: #...on a cluster such as minerva
 					mapScript = open(settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/mapping/"+line+".tophat2.mapping.lsf", "w") #change to relative path
@@ -208,7 +200,7 @@ class ScriptWriter(object):
 					qcScript.write("python "+os.path.dirname(os.path.realpath(__file__))+"/quality_control.py " + outdir + " " + inputs.genome()+ " " + basedir+"/QC/"+line+"\n")
 					mapScript.write("./" + qcScriptPath +"\n")
 
-					countScriptPath = settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/counts/"+line+".counts.lsf" 
+					countScriptPath = settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/counts/"+line+".counts.sh" 
 					countScript = open(countScriptPath, "w")
 					countScript.write("cd "+outdir+"\n")
 					countScript.write(str(count.htseqcounts(outdir+"/accepted_hits.bam", countStrand))+"\n")
@@ -221,6 +213,7 @@ class ScriptWriter(object):
 					#launch mapping bsub < here
 					#mapScript.write("cd "+outdir+"\n")
 					#mapScript.write(str(count.htseqcounts(outdir+"/accepted_hits.bam", countStrand))+"\n")
+		qcScript.close()
 		countScript.close()
 		mapScript.close()
 
