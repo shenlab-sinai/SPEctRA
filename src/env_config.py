@@ -1,14 +1,11 @@
 #!/usr/bin/python
 import os
-import sys
 import yaml
 
 # parses necessary base variables.
 
 
 class ImportSettings(object):
-    # def __init__(self, config):
-    # 	self.config = config
 
     def openConfig(self):
         dir = os.path.dirname(__file__)
@@ -31,9 +28,9 @@ class ImportSettings(object):
         # return dict of genomes and their paths
 
     def mappingPaths(self):
-        # return dict of available short-read aligner paths/modules
         aligner = self.openConfig()["Short-read_aligners"]
         return aligner
+        # return dict of available short-read aligner paths/modules
 
     # hardcoded for minerva args. Change this to be more flexible
     def bsubHeader(self, name, directory, project, proc,
@@ -52,7 +49,6 @@ class ImportSettings(object):
         header = env + cluster + queue + proc + \
             Rflag + time + jobID + log + err + "\n"
         return header
-# 	def openConfig(self):
 
 # create separate setup.py-type file for pipeline setup and update
     # update genome list class to update genome dictionary
