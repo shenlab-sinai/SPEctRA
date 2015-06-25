@@ -2,8 +2,9 @@
 import os
 import glob
 
-
 # python class to manage auxilary file/string manipulation
+
+
 class Utility(object):
     # iterates through a directory and lists subdirectories, use with glob
     # method too
@@ -30,6 +31,6 @@ class Utility(object):
         for line in glob.glob(directory + "/*.lsf"):
             os.system("bsub <" + line)
 
-    def batchExecute(self, directory):
-        for line in glob.glob(directory + "/*.sh"):
-            os.system("./" + line)
+    def chmodAll(self, directory):
+        for line in glob.glob(directory + "*.sh"):
+            os.system("chomd u+x " + line)

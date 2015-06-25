@@ -28,8 +28,16 @@ def main():
         directories.startMappingEnv()  # mapping subdirectories created
         writer.writeMappingScript(options.pipeline_input, options.merge_table)
         # omit for testing purposes
-        util.batchBsub(
-            settings.homeDir() + "/" + pipeline_command.projName() + "/scripts/mapping/")
+        if settings.getEnv()["cluster"] is not None:
+            util.batchBsub(
+                settings.homeDir() + "/" + pipeline_command.projName() + "/scripts/mapping/")
+        if settings.getEnv()["server"] is not None:
+            util.batchExecute(
+                settings.homeDir() + "/" + pipeline_command.projName() + "/scripts/mapping/")
+            util.batchExecute(
+                settings.homeDir() + "/" + pipeline_command.projName() + "/scripts/counts/")
+            util.batchExecute(
+                settings.homeDir() + "/" + pipeline_command.projName() + "/scripts/QC/")
 
 if __name__ == '__main__':
     main()
