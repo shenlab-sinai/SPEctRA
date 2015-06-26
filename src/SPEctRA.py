@@ -31,6 +31,7 @@ def main():
         if settings.getEnv()["cluster"] is not None:
             util.batchBsub(
                 settings.homeDir() + "/" + pipeline_command.projName() + "/scripts/mapping/")
+        # Server logic added 
         if settings.getEnv()["server"] is not None:
             util.chmodAll(
                 settings.homeDir() + "/" + pipeline_command.projName() + "/scripts/mapping/")
