@@ -21,16 +21,18 @@ class Utility(object):
     def findKey(self, input_dict, value):
         return {k for k, v in input_dict.items() if v == value}
 
-    # launch qsub scripts into the respective queue
+    # launch pbs scripts into the respective queue
     def batchQsub(self, directory):
         for line in glob.glob(directory + "/*.pbs"):
             os.system("qsub " + line)
 
-    # launch qsub scripts into the respective queue
+    # launch lsf scripts into the respective queue
     def batchBsub(self, directory):
         for line in glob.glob(directory + "/*.lsf"):
             os.system("bsub <" + line)
 
+    #  execute chmod u+x on all .sh scripts to make
+    #  all .sh scripts executable
     def chmodAll(self, directory):
         for line in glob.glob(directory + "*.sh"):
             os.system("chmod u+x " + line)
