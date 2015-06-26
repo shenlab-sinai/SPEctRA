@@ -1,7 +1,7 @@
 Environment:
-    cluster: 
+    cluster:
     server: local
-project_directory: /path/to/project/directory/
+project_directory: /home/immanuel/Documents/Develop/SPEctRA_test_environment/proj_dir
 Short-read_aligners:
     tophat2: tophat2/version
     bowtie2: bowtie2/version
