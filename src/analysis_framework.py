@@ -227,12 +227,12 @@ class ScriptWriter(object):
 		qcScript.close()
 		countScript.close()
 		mapScript.close()
-
-		mapMaster.write("/" + settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/countMaster.sh"+"\n")
-		countMaster.write("/" + settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/qcMaster.sh"+"\n")
-		mapMaster.close()
-		countMaster.close()
-		qcMaster.close()
+		if settings.getEnv()["server"] is not None:
+			mapMaster.write("/" + settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/countMaster.sh"+"\n")
+			countMaster.write("/" + settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/qcMaster.sh"+"\n")
+			mapMaster.close()
+			countMaster.close()
+			qcMaster.close()
 	def writeCounterScript(self):
 		pass
 
