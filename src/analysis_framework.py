@@ -129,10 +129,10 @@ class ScriptWriter(object):
 		# 	if settings.getEnv()["cluster"] is not 'None': 
 		# 		mapScript = open(settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/mapping/"+inputs.projName()+".STAR.mapping.lsf", "w")
 		# 		mapScript.write(settings.lsfHeader(inputs.projName()+".STAR",settings.homeDir(),inputs.projName(),str(inputs.proc()),queue="himem_24hr")+"\n")
-		
-		mapMaster = open(settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/mappingMaster.sh","w")
-		countMaster = open(settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/countMaster.sh","w")
-		qcMaster = open(settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/qcMaster.sh","w")
+		if settings.getEnv()["server"] is not None:
+			mapMaster = open(settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/mappingMaster.sh","w")
+			countMaster = open(settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/countMaster.sh","w")
+			qcMaster = open(settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/qcMaster.sh","w")
 
 		for line in self.util.subDirectories(inputs.fastQdir()):
 			
@@ -212,7 +212,7 @@ class ScriptWriter(object):
 					countScript = open(countScriptPath, "w")
 					countScript.write("cd "+outdir+"\n")
 					countScript.write(str(count.htseqcounts(outdir+"/accepted_hits.bam", countStrand))+"\n")
-					)
+					
 
 					countMaster.write("./"+settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/counts/"+line+".counts.sh"+"\n")
 
@@ -228,8 +228,8 @@ class ScriptWriter(object):
 		countScript.close()
 		mapScript.close()
 
-		mapMaster.write("./" + settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/countMaster.sh"+"\n")
-		countMaster.write("./" + settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/qcMaster.sh"+"\n")
+		mapMaster.write("/" + settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/countMaster.sh"+"\n")
+		countMaster.write("/" + settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/qcMaster.sh"+"\n")
 		mapMaster.close()
 		countMaster.close()
 		qcMaster.close()

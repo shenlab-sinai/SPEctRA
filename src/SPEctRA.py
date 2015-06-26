@@ -38,6 +38,10 @@ def main():
                 settings.homeDir() + "/" + pipeline_command.projName() + "/scripts/counts/")
             util.chmodAll(
                 settings.homeDir() + "/" + pipeline_command.projName() + "/scripts/QC/")
+            util.chmodAll(
+                settings.homeDir() + "/" + pipeline_command.projName() + "/scripts/")
+            os.system("/"+settings.homeDir() + "/" + pipeline_command.projName() + "/scripts/mappingMaster.sh")
+
 
 if __name__ == '__main__':
     main()
