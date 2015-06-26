@@ -129,7 +129,11 @@ class ScriptWriter(object):
 		# 	if settings.getEnv()["cluster"] is not 'None': 
 		# 		mapScript = open(settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/mapping/"+inputs.projName()+".STAR.mapping.lsf", "w")
 		# 		mapScript.write(settings.lsfHeader(inputs.projName()+".STAR",settings.homeDir(),inputs.projName(),str(inputs.proc()),queue="himem_24hr")+"\n")
-				
+		
+		mapMaster = open(settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/mappingMaster.sh","w")
+		countMaster = open(settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/countMaster.sh","w")
+		qcMaster = open(settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/qcMaster.sh","w")
+
 		for line in self.util.subDirectories(inputs.fastQdir()):
 			
 			#sample = glob.glob(inputs.fastQdir()+"/"+line+"/*.fastq.gz") #change to function call
@@ -193,19 +197,24 @@ class ScriptWriter(object):
 					mapScript = open(settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/mapping/"+line+".tophat2.mapping.sh", "w")
 					mapScript.write("export BOWTIE2_INDEXES="+settings.genomes()[inputs.genome()][inputs.aligner()]['index'] +"\n")
 					mapScript.write(str(align.tophat()+"\n"))
-
+					
+					mapMaster.write("./"+settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/mapping/"+line+".tophat2.mapping.sh"+"\n")
 
 					qcScriptPath = settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/QC/"+line+".QC.sh"
 					qcScript = open(qcScriptPath, "w")
 					qcScript.write("python "+os.path.dirname(os.path.realpath(__file__))+"/quality_control.py " + outdir + " " + inputs.genome()+ " " + basedir+"/QC/"+line+"\n")
-					mapScript.write("./" + qcScriptPath +"\n")
+					
+					qcMaster.write("./"+settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/QC/"+line+".QC.sh"+"\n")
+
+
 
 					countScriptPath = settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/counts/"+line+".counts.sh" 
 					countScript = open(countScriptPath, "w")
 					countScript.write("cd "+outdir+"\n")
 					countScript.write(str(count.htseqcounts(outdir+"/accepted_hits.bam", countStrand))+"\n")
-					mapScript.write("./" + countScriptPath +"\n")
+					)
 
+					countMaster.write("./"+settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/counts/"+line+".counts.sh"+"\n")
 
 					#mapScript.write("python "+os.path.dirname(os.path.realpath(__mapScript__))+"/quality_control.py " + outdir + " " + inputs.genome()+ " " + basedir+"/QC/"+line+"\n") 
 					
@@ -213,10 +222,17 @@ class ScriptWriter(object):
 					#launch mapping bsub < here
 					#mapScript.write("cd "+outdir+"\n")
 					#mapScript.write(str(count.htseqcounts(outdir+"/accepted_hits.bam", countStrand))+"\n")
+		
+
 		qcScript.close()
 		countScript.close()
 		mapScript.close()
 
+		mapMaster.write("./" + settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/countMaster.sh"+"\n")
+		countMaster.write("./" + settings.homeDir()+"/"+inputs.projName()+"/"+"scripts/qcMaster.sh"+"\n")
+		mapMaster.close()
+		countMaster.close()
+		qcMaster.close()
 	def writeCounterScript(self):
 		pass
 
