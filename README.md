@@ -3,28 +3,44 @@ SPEctRA RNAseq Pipeline:
 
 ###Dependencies:###
  - Python version 2.7 
- - PyYAML
- - Pysam
+ - PyYAML (http://pyyaml.org/wiki/PyYAML) or `pip install pyyaml`
 
-Ready to test on Minerva cluster to generate and launch lsf scripts for tophat mapping jobs first (Server functionality in the works, as well as generalized deployment)
-
-###To begin testing:###
-  1. Login to Minerva
-  2. git clone "git@github.com:shenlab-sinai/SPEctRA.git"
-  3. cd /SPEctRA/src/
-  4. edit config_template.yaml to set paths to your respective home and genome directories. Scratch space usage is recommended.
+###Getting Started:###
+  1. git clone "git@github.com:shenlab-sinai/SPEctRA.git"
+  2. cd /SPEctRA/src/
+  3. edit config_template.yaml to set paths to your respective home and genome directories. Scratch space usage is recommended.
   5. Create input file to for mapping run using pipeline_start_template.yaml as a basis for required parameters.
+
+
      
 ######Pipeline Setup: [Please refer to this example configuration YAML file:](/src/config_template.yaml)
           
-- The `Environment` header corresponds to the linux shell environment where you are submitting pipeline-generated jobs. This could either be a  `cluster` such as Minerva or a `server` like ngseq/gwas/medinfo
+- The `Environment` header corresponds to the linux shell environment where you are submitting pipeline-generated jobs, which could either be a  `cluster`  or a single `server`. 
+
+This would look as follows for a cluster: 
+ 
+
+
+           Environment:
+               cluster: Minerva
+               server:
+
+OR for a local/remote server:
+
+           Environment:
+               cluster: 
+               server: local
+
 - The `project_directory` header specifies the absolute path to a directory where you wish to save <i>all</i> your pipeline-run tasks. Each task will be separated in subdirectories outlined in the [Job execution file](pipeline_start_template.yaml)
            
-- The following `Short-read_aligners` are supported: `tophat` and `STAR`. Each of the corresponding subheadings must be specified with the respective module name or path. Example: 
+- For _cluster environments_ The following `Short-read_aligners` are supported: `tophat` and `STAR`. Each of the corresponding subheadings must be specified with the respective module name or path. Example: 
  - `tophat2: tophat/2.0.9`
  - `bowtie2: bowtie2/2.1.0` Bowtie module <i>must</i> be specified with Tophat
  - `STAR: rna-star/2.3.0e`
- - the `genomes` header outlines paths for genomic reference and annotation files for mapping and QC. As long as the following subheader hiercarchy is adhered, the pipeline can support any built genome for tophat and STAR short-read aligners. The key subheading is the organism name. For example, for a `mouse` genome, the following YAML structure is as follows:
+
+     To execute SPEctRA locally, please ensure that tophat2, bowtie2, and samtools are added to your PATH.
+
+- The `genomes` header outlines paths for genomic reference and annotation files for mapping and QC. As long as the following subheader hiercarchy is adhered, the pipeline can support any built genome for tophat and STAR short-read aligners. The key subheading is the organism name. For example, for a `mouse` genome, the following YAML structure is as follows:
    
 
 
