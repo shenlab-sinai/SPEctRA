@@ -19,8 +19,8 @@ class Mapping(object):
         # command: tophat2 --library-type fr-unstranded --no-novel-juncs
         # --b2-very-sensitive -p 16 -G  $GTF -o $OUTDIR $BOWTIE_INDEX $SAMPLE
         # (must be list)
-        command = "tophat2 --library-type %s --no-novel-juncs --b2-very-sensitive -p %s -G %s -o %s %s  %s %s " % (
-            self.libType, self.proc, self.genome["gtf"], self.outdir, self.genome["index"], self.fastqR1, self.fastqR2)
+        command = "tophat2 --library-type %s --no-novel-juncs --b2-very-sensitive -p %s %s -o %s %s  %s %s " % (
+            self.libType, self.proc, "-G" + self.genome["gtf"], self.outdir, self.genome["index"], self.fastqR1, self.fastqR2)
         return command
 
     def STAR(self):  # unique pbs/.sh script due to himmem requirements
