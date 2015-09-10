@@ -1,6 +1,6 @@
 Environment:
-    cluster:
-    server: local
+    cluster: Minerva
+    server: 
 project_directory: /home/immanuel/Documents/Develop/SPEctRA_test_environment/proj_dir
 Short-read_aligners:
     tophat2: tophat2/version
@@ -10,7 +10,7 @@ genomes:
     mouse: 
         rRNApath: /path/to/rRNA/gtf
         tophat2: 
-            gtf: /path/to/genome/annotation
+            gtf: 
             index: /path/to/tophat2/genome/
         exonicPath: 
         intronicPath: 
