@@ -34,7 +34,7 @@ OR for a local/remote server:
 - The `project_directory` header specifies the absolute path to a directory where you wish to save <i>all</i> your pipeline-run tasks. Each task will be separated in subdirectories outlined in the [Job execution file](pipeline_start_template.yaml)
            
 - For _cluster environments_ The following `Short-read_aligners` are supported: `tophat` and `STAR`. Each of the corresponding subheadings must be specified with the respective module name or path. Example: 
- - `tophat2: tophat/2.0.9`
+ - `tophat2: tophat/2.0.12`
  - `bowtie2: bowtie2/2.1.0` Bowtie module <i>must</i> be specified with Tophat
  - `STAR: rna-star/2.3.0e`
 
