@@ -12,31 +12,6 @@ genomes:
         tophat2: 
             gtf: 
             index: /path/to/tophat2/genome/
-        exonicPath: 
-        intronicPath: 
-        intragenicPath:
-        intergenicPath:
-        STAR:
-            path: 
-    hg19_ERCC: 
-        rRNApath: 
-        tophat2:  
-            gtf: 
-            index: 
-        exonicPath: 
-        intronicPath:
-        intragenicPath:
-        intergenicPath:
-        STAR:
-            path:
-    mm9: 
-        rRNApath: 
-        tophat2:  
-            gtf: 
-            index: 
-        exonicPath: 
-        intronicPath: 
-        intragenicPath:
-        intergenicPath:
+        geneLenghts: /path/to/gene/length/file
         STAR:
             path: 
