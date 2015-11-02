@@ -48,6 +48,3 @@ class Counting(object):
         command = "samtools sort -no %s temp | samtools view -h -o - - |htseq-count -s %s - %s > %s" % (
             bamPath, stranded, self.gtfPath, self.outFile)
         return command
-
-    def cuffDiffcounts(self, fastaPath, stranded="unstranded"):
-        pass
