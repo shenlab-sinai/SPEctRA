@@ -27,12 +27,15 @@ class SetProjectEnv(object): #creates project folders (relative paths) before pr
 		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"mapping")
 		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"QC")
 		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"counts")
+		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"RPKM")
 		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"scripts/mapping")
 		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"scripts/QC")
-		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"scripts/counts")#for now
+		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"scripts/counts")
+		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"scripts/RPKM")#for now
 		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"logs/mapping")
 		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"logs/QC")
 		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"logs/counts")
+		os.system("mkdir "+self.envDir+"/"+self.projDir+"/"+"logs/RPKM")
 	#os.system("mkdir "+self.projDir+"/"+"differential_analysis") Add new method to do this later
 
 class UserInputsConfigFile(object): #parses user submitted YAML file ( single command line options should be placed elswhere)
