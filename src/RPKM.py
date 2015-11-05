@@ -17,3 +17,8 @@ class CalcRPKM(object):
         RPM = counts / depth
         RPKM = np.true_divide(RPM, lengths)
         return RPKM
+
+    def writeRPKM(self, RPKM, fileName):
+        file = open(fileName + ".RPKM.txt", "w")
+        file.write(RPKM)
+        file.close()
