@@ -198,7 +198,7 @@ class ScriptWriter(object):
 					countScript.write("cd "+outdir+"\n")
 					countScript.write(str(count.htseqcounts(outdir+"/accepted_hits.bam", countStrand))+"\n")
 					countScript.write("python "+ os.path.dirname(os.path.realpath(__file__))+"/RPKM.py "+ 
-						inputs.genome()+ " " + exp_outFile+".htseq_counts.txt"+" "+exp_outFile+".RPKM.txt")
+						settings.genomes()[inputs.genome()]["geneLengths"] + " " + exp_outFile+".htseq_counts.txt"+" "+exp_outFile+".RPKM.txt")
 					mapScript.write("bsub < " + countScriptPath +"\n")
 					
 
