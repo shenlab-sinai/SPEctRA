@@ -1,4 +1,5 @@
 #!/usr/bin/python
+import sys
 import numpy as np
 
 
@@ -8,10 +9,10 @@ class CalcRPKM(object):
         self.genomes = genomes
         self.countPath = countPath
 
-    def calc(self, countPath):
+    def calc(self):
         lengths = np.genfromtxt(
-            self.genomes["geneLenghts"], delimiter='\t', usecols=1)
-        counts = np.genfromtxt(countPath, delimiter='\t', usecols=1)
+            self.genomes, delimiter='\t', usecols=1)
+        counts = np.genfromtxt(self.countPath, delimiter='\t', usecols=1)
         counts = counts[0:len(counts) - 5]
         depth = np.sum(counts)
         RPM = counts / depth
@@ -19,10 +20,8 @@ class CalcRPKM(object):
         return RPKM
 
     def writeRPKM(self, RPKM, fileName):
-        file = open(fileName + ".RPKM.txt", "w")
-        file.write(RPKM)
-        file.close()
+        np.savetxt(fileName + ".RPKM.txt", RPKM, delimiter="\t")
 
 
-compute = CalcRPKM(sys.argv[1],sys.argv[2])
-compute.writeRPKM(sys.argv[3])
+compute = CalcRPKM(sys.argv[1], sys.argv[2])
+compute.writeRPKM(compute.calc(), sys.argv[3])
