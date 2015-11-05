@@ -22,3 +22,7 @@ class CalcRPKM(object):
         file = open(fileName + ".RPKM.txt", "w")
         file.write(RPKM)
         file.close()
+
+
+compute = CalcRPKM(sys.argv[1],sys.argv[2])
+compute.writeRPKM(sys.argv[3])
