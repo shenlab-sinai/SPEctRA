@@ -149,7 +149,9 @@ class ScriptWriter(object):
 			
 
 			align = Mapping(self.fastqs.read1(sample),inputs.proc(), outdir,settings.genomes()[inputs.genome()][inputs.aligner()],fastqR2=self.fastqs.read2(sample))
-			count = Counting(settings.genomes()[inputs.genome()]['tophat2']['gtf'],basedir+"/counts/"+line+"."+"htseq_counts"+".txt")
+			
+			exp_outFile = basedir+"/counts/"+line
+			count = Counting(settings.genomes()[inputs.genome()]['tophat2']['gtf'],exp_outFile+".htseq_counts.txt")
 			countStrand = "no"
 			
 
@@ -196,6 +198,8 @@ class ScriptWriter(object):
 					countScript.write("cd "+outdir+"\n")
 					countScript.write(str(count.htseqcounts(outdir+"/accepted_hits.bam", countStrand))+"\n")
 					mapScript.write("bsub < " + countScriptPath +"\n")
+					mapScript.write("python "+ os.path.dirname(os.path.realpath(__file__))+"/RPKM.py "+ 
+						inputs.genome()+ " " + exp_outFile+".htseq_counts.txt"+" "+exp_outFile+".RPKM.txt")
 
 				if settings.getEnv()["server"] is not None:
 					
