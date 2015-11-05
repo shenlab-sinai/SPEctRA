@@ -197,9 +197,10 @@ class ScriptWriter(object):
 					countScript.write("module load python/2.7.6"+"\n"+"module load py_packages/2.7"+"\n"+"module load samtools"+"\n")
 					countScript.write("cd "+outdir+"\n")
 					countScript.write(str(count.htseqcounts(outdir+"/accepted_hits.bam", countStrand))+"\n")
-					mapScript.write("bsub < " + countScriptPath +"\n")
-					mapScript.write("python "+ os.path.dirname(os.path.realpath(__file__))+"/RPKM.py "+ 
+					countScript.write("python "+ os.path.dirname(os.path.realpath(__file__))+"/RPKM.py "+ 
 						inputs.genome()+ " " + exp_outFile+".htseq_counts.txt"+" "+exp_outFile+".RPKM.txt")
+					mapScript.write("bsub < " + countScriptPath +"\n")
+					
 
 				if settings.getEnv()["server"] is not None:
 					
