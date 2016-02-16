@@ -153,7 +153,11 @@ class ScriptWriter(object):
 			if inputs.strand() == "fr-secondstrand":
 				align = Mapping(self.fastqs.read1(sample),inputs.proc(), outdir,settings.genomes()[inputs.genome()][inputs.aligner()],libType="fr-secondstrand",fastqR2=self.fastqs.read2(sample)) 
 				countStrand = "yes"
-			
+
+			if inputs.strand() == "fr-firststrand":
+				align = Mapping(self.fastqs.read1(sample),inputs.proc(), outdir,settings.genomes()[inputs.genome()][inputs.aligner()],libType="fr-firststrand",fastqR2=self.fastqs.read2(sample)) 
+				countStrand = "reverse"
+
 			########################### resolve STAR later ##################################################
 			# if inputs.aligner() == "STAR": #opens a single STAR mapping.lsf mapScript (himem queues only)
 			# 	if settings.getEnv()["cluster"] is not 'None':
