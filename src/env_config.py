@@ -34,9 +34,11 @@ class ImportSettings(object):
 
     # hardcoded for minerva args. Change this to be more flexible
     def bsubHeader(self, name, directory, project, proc,
-                   logDir, time="21:00", queue="scavenger"):
+                   logDir, time="21:00", cluster="manda", 
+                   account="acc_shenl03_rna", queue="low"):
         env = "#!/bin/bash" + "\n"
-        cluster = "#BSUB -m mothra" + "\n"
+        cluster = "#BSUB -m " + cluster + "\n"
+        account = "#BSUB -P " + account + "\n"
         queue = "#BSUB -q " + queue + "\n"
         proc = "#BSUB -n " + proc + "\n"
         Rflag = "#BSUB -R span[hosts=1]" + "\n"
@@ -46,7 +48,7 @@ class ImportSettings(object):
             "/logs/" + logDir + "/" + name + ".log" + "\n"
         err = "#BSUB -e " + directory + "/" + project + \
             "/logs/" + logDir + "/" + name + ".log" + "\n"
-        header = env + cluster + queue + proc + \
+        header = env + cluster + account + queue + proc + \
             Rflag + time + jobID + log + err + "\n"
         return header
 
